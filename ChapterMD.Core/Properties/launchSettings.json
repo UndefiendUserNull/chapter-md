@@ -2,6 +2,11 @@
   "profiles": {
     "ChapterMD.Core": {
       "commandName": "Project"
+    },
+    "Start CLI": {
+      "commandName": "Project",
+      "commandLineArgs": "-m work.md -c 15",
+      "workingDirectory": "${ProjectDir)"
     }
   }
 }

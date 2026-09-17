@@ -9,14 +9,16 @@ public static class Program
         [Option('m', "name", Required = true, Default = ".", HelpText = "File name.")]
         public string FileName { get; set; } = string.Empty;
 
-        [Option(
+        [Option('v', "verbose",
           Default = false,
           HelpText = "Prints all messages to standard output.")]
         public bool Verbose { get; set; }
 
-        [Value(5, MetaName = "amount", HelpText = "The amount of chapters inside the file.")]
+        [Option('c', "amount", HelpText = "The amount of chapters inside the file.")]
         public int ChaptersAmount { get; set; }
     }
+
+    private readonly static UConsole Console = new();
 
     static int Main(string[] args)
     {
@@ -28,17 +30,23 @@ public static class Program
     }
     static void RunOptions(Options opts)
     {
+        Console.SetVerbose(opts.Verbose);
         if (opts.FileName != string.Empty && opts.ChaptersAmount > 0)
         {
+            Console.WriteVerboseLine($"Writing {opts.ChaptersAmount} chapters in {opts.FileName} ...");
             Core.ChapterFileWriter.WriteChapterFile(opts.FileName, opts.ChaptersAmount);
         }
+
     }
     static void HandleParseError(IEnumerable<Error> errs)
     {
+        Console.WriteLine("You didn't provide enough arguments.");
+        using var writer = new StreamWriter("chmd_errors.log", append: false);
         foreach (var item in errs)
         {
-            throw new Exception(item.ToString());
+            writer.WriteLine(item);
         }
+
     }
 
 }

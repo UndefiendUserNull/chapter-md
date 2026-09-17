@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "ChapterMD.Cli": {
+      "commandName": "Project"
+    },
+    "CLI Default": {
+      "commandName": "Project",
+      "commandLineArgs": "-v -m \"Chapters.md\" -c 15"
+    }
+  }
+}

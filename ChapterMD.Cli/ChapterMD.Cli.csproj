@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="f.md" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
   </ItemGroup>
 
