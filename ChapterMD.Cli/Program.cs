@@ -14,15 +14,18 @@ public static class Program
           HelpText = "Prints all messages to standard output.")]
         public bool Verbose { get; set; }
 
-        [Option('c', "amount", HelpText = "The amount of chapters inside the file.")]
+        [Option('c', "amount", HelpText = "The amount of chapters inside the file..")]
         public int ChaptersAmount { get; set; }
+
+        [Option('s', "sub-amount", HelpText = "The amount of sub-chapters inside each chapter.")]
+        public int SubChaptersAmount { get; set; }
     }
 
     private readonly static UConsole Console = new();
 
     static int Main(string[] args)
     {
-        CommandLine.Parser.Default.ParseArguments<Options>(args)
+        Parser.Default.ParseArguments<Options>(args)
           .WithParsed(RunOptions)
           .WithNotParsed(HandleParseError);
 
@@ -33,8 +36,8 @@ public static class Program
         Console.SetVerbose(opts.Verbose);
         if (opts.FileName != string.Empty && opts.ChaptersAmount > 0)
         {
-            Console.WriteVerboseLine($"Writing {opts.ChaptersAmount} chapters in {opts.FileName} ...");
-            Core.ChapterFileWriter.WriteChapterFile(opts.FileName, opts.ChaptersAmount);
+            Console.WriteVerboseLine($"Writing {opts.ChaptersAmount} chapters in {opts.FileName} and {opts.SubChaptersAmount} Sub-Chapters ...");
+            Core.ChapterFileWriter.WriteChapterFile(opts.FileName, opts.ChaptersAmount, opts.SubChaptersAmount);
         }
 
     }

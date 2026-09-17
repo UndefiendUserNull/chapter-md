@@ -5,7 +5,7 @@
     },
     "CLI Default": {
       "commandName": "Project",
-      "commandLineArgs": "-v -m \"Chapters.md\" -c 15"
+      "commandLineArgs": "-v -m \"Chapters.md\" -c 15 -s 5"
     }
   }
 }
