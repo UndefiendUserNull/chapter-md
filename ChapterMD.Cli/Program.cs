@@ -28,17 +28,18 @@ public static class Program
         public int StartFrom { get; set; } = 1;
         [Option('g', "start-sub-from", Default = 1)]
         public int StartSubFrom { get; set; } = 1;
+        [Option('o', "outpur", Default = ".", HelpText = "Where the file will be saved.")]
+        public string Path { get; set; } = ".";
     }
 
     private readonly static UConsole Console = new();
 
     static int Main(string[] args)
     {
-        Parser.Default.ParseArguments<Options>(args)
-          .WithParsed(RunOptions)
-          .WithNotParsed(HandleParseError);
-
-        return 0;
+        return Parser.Default.ParseArguments<Options>(args)
+        .MapResult(
+        opts => { RunOptions(opts); return 0; },
+        errs => { HandleParseError(errs); return 1; });
     }
     static void RunOptions(Options opts)
     {
@@ -48,6 +49,7 @@ public static class Program
             Console.WriteVerboseLine($"Writing {opts.ChaptersAmount} chapters in {opts.FileName} and {opts.SubChaptersAmount} Sub-Chapters ...");
             Core.ChapterFileWriter.WriteChapterFile(
                 opts.FileName,
+                opts.Path,
                 opts.ChaptersAmount,
                 opts.SubChaptersAmount,
                 opts.Title,

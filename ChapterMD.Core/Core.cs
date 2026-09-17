@@ -3,6 +3,7 @@
 public static class ChapterFileWriter
 {
     public static void WriteChapterFile(
+        string fileName,
         string path,
         int chaptersAmount,
         int subChaptersAmount,
@@ -11,19 +12,24 @@ public static class ChapterFileWriter
         int startFrom,
         int startSubFrom)
     {
-        if (startFrom > chaptersAmount)
-        {
-            throw new Exception("The start from index is bigger than the chapters amount.");
-        }
+        if (startFrom > chaptersAmount) throw new Exception("The start from index is bigger than the chapters amount.");
 
-        if (startSubFrom > subChaptersAmount)
+        if (startSubFrom > subChaptersAmount) throw new Exception("The sub start from index is bigger than the sub chapters amount.");
+
+        if (startFrom < 0 || startSubFrom < 0 || subChaptersAmount < 0 || chaptersAmount < 0)
         {
-            throw new Exception("The sub start from index is bigger than the sub chapters amount.");
+            throw new IndexOutOfRangeException("Negative number found in (" +
+            $"startFrom: {startFrom}, startSubFrom: {startSubFrom}, subChaptersAmount: {subChaptersAmount}, chaptersAmount: {chaptersAmount}).");
         }
 
         try
         {
-            using var writer = new StreamWriter(path, append: false);
+            var finalPath = Path.Combine(path, fileName);
+            var dir = Path.GetDirectoryName(finalPath);
+            if (!string.IsNullOrEmpty(dir)) Directory.CreateDirectory(dir);
+
+            using var writer = new StreamWriter(finalPath, append: false);
+
             for (int i = startFrom; i <= chaptersAmount; i++)
             {
                 writer.WriteLine($"- [ ] {title} {i}");
