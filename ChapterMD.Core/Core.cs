@@ -2,19 +2,44 @@
 
 public static class ChapterFileWriter
 {
-    public static void WriteChapterFile(string path, int chaptersAmount, int subChaptersAmount, string title, string subTitle)
+    public static void WriteChapterFile(
+        string path,
+        int chaptersAmount,
+        int subChaptersAmount,
+        string title,
+        string subTitle,
+        int startFrom,
+        int startSubFrom)
     {
-        using var writer = new StreamWriter(path, append: false);
-        for (int i = 1; i <= chaptersAmount; i++)
+        if (startFrom > chaptersAmount)
         {
-            writer.WriteLine($"- [ ] {title} {i}");
-            if (subChaptersAmount > 0)
+            throw new Exception("The start from index is bigger than the chapters amount.");
+        }
+
+        if (startSubFrom > subChaptersAmount)
+        {
+            throw new Exception("The sub start from index is bigger than the sub chapters amount.");
+        }
+
+        try
+        {
+            using var writer = new StreamWriter(path, append: false);
+            for (int i = startFrom; i <= chaptersAmount; i++)
             {
-                for (int j = 1; j < subChaptersAmount; j++)
+                writer.WriteLine($"- [ ] {title} {i}");
+                if (subChaptersAmount > 0)
                 {
-                    writer.WriteLine($"\t- [ ] {subTitle} {i}.{j}");
+                    for (int j = startSubFrom; j <= subChaptersAmount; j++)
+                    {
+                        writer.WriteLine($"\t- [ ] {subTitle} {i}.{j}");
+                    }
                 }
             }
+        }
+        catch (Exception)
+        {
+            // TODO: Handle common IO errors
+            throw;
         }
     }
 }

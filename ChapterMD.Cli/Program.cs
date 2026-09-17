@@ -24,6 +24,10 @@ public static class Program
 
         [Option("sub-title", Default = "Part", HelpText = "Custom sub-title name instead of Part X.Y")]
         public string SubTitle { get; set; } = "Part";
+        [Option('f', "start-from", Default = 1)]
+        public int StartFrom { get; set; } = 1;
+        [Option('g', "start-sub-from", Default = 1)]
+        public int StartSubFrom { get; set; } = 1;
     }
 
     private readonly static UConsole Console = new();
@@ -42,7 +46,15 @@ public static class Program
         if (opts.FileName != string.Empty && opts.ChaptersAmount > 0)
         {
             Console.WriteVerboseLine($"Writing {opts.ChaptersAmount} chapters in {opts.FileName} and {opts.SubChaptersAmount} Sub-Chapters ...");
-            Core.ChapterFileWriter.WriteChapterFile(opts.FileName, opts.ChaptersAmount, opts.SubChaptersAmount, opts.Title, opts.SubTitle);
+            Core.ChapterFileWriter.WriteChapterFile(
+                opts.FileName,
+                opts.ChaptersAmount,
+                opts.SubChaptersAmount,
+                opts.Title,
+                opts.SubTitle,
+                opts.StartFrom,
+                opts.StartSubFrom
+                );
         }
 
     }
