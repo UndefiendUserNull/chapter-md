@@ -28,7 +28,12 @@ public static class Program
         public int StartFrom { get; set; } = 1;
         [Option('g', "start-sub-from", Default = 1)]
         public int StartSubFrom { get; set; } = 1;
-        [Option('o', "outpur", Default = ".", HelpText = "Where the file will be saved.")]
+        [Option('a', "append", Default = true, HelpText = "Adds new lines to existing chapters file continuing from the last chapter.")]
+        public bool Append { get; set; } = false;
+        [Option('r', "fresh-append", Default = false, HelpText = "Adds new lines to existing chapters file starting from (StartFrom).")]
+        public bool FreshAppend { get; set; } = false;
+
+        [Option('o', "output", Default = ".", HelpText = "Where the file will be saved.")]
         public string Path { get; set; } = ".";
     }
 
@@ -55,7 +60,9 @@ public static class Program
                 opts.Title,
                 opts.SubTitle,
                 opts.StartFrom,
-                opts.StartSubFrom
+                opts.StartSubFrom,
+                opts.Append,
+                opts.FreshAppend
                 );
         }
 

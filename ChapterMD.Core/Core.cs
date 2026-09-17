@@ -10,7 +10,9 @@ public static class ChapterFileWriter
         string title,
         string subTitle,
         int startFrom,
-        int startSubFrom)
+        int startSubFrom,
+        bool append,
+        bool freshAppend)
     {
         if (startFrom > chaptersAmount) throw new Exception("The start from index is bigger than the chapters amount.");
 
@@ -26,11 +28,23 @@ public static class ChapterFileWriter
         {
             var finalPath = Path.Combine(path, fileName);
             var dir = Path.GetDirectoryName(finalPath);
-            if (!string.IsNullOrEmpty(dir)) Directory.CreateDirectory(dir);
+            int finalStartFrom = startFrom;
+            int finalChaptersAmount = chaptersAmount;
 
-            using var writer = new StreamWriter(finalPath, append: false);
+            if (!string.IsNullOrEmpty(dir))
+            {
+                Console.WriteLine($"Creating {dir}");
+                Directory.CreateDirectory(dir);
+            }
 
-            for (int i = startFrom; i <= chaptersAmount; i++)
+            if (Path.Exists(finalPath) && append)
+            {
+                AppendExistingFile(finalPath, ref finalStartFrom, ref finalChaptersAmount, startFrom);
+            }
+
+            using var writer = new StreamWriter(finalPath, append: append);
+
+            for (int i = finalStartFrom; i <= finalChaptersAmount; i++)
             {
                 writer.WriteLine($"- [ ] {title} {i}");
                 if (subChaptersAmount > 0)
@@ -48,4 +62,31 @@ public static class ChapterFileWriter
             throw;
         }
     }
+    public static void AppendExistingFile(string finalPath, ref int finalStartFrom, ref int finalChaptersAmount, int startFrom)
+    {
+        Console.WriteLine($"File at {finalPath} already exists and option append is used.");
+        string[] data = File.ReadAllLines(finalPath);
+
+        if (data.Length == 0)
+        {
+            Console.WriteLine("File found was empty.");
+            return;
+        }
+
+        var lastChapter = data.Last(x => !x.StartsWith('\t')).Split(' ');
+
+        if (int.TryParse(lastChapter[lastChapter.Length - 1], out int parsed))
+        {
+            finalStartFrom = parsed + 1;
+            finalChaptersAmount += finalChaptersAmount;
+            Console.WriteLine($"Last chapter found = {finalStartFrom}");
+        }
+        else
+        {
+            finalStartFrom = startFrom;
+            Console.WriteLine($"Start from didn't change ({startFrom})");
+        }
+        Console.WriteLine($"Start from = {finalStartFrom}");
+    }
+
 }
