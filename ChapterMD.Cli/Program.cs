@@ -6,19 +6,24 @@ public static class Program
 {
     class Options
     {
-        [Option('m', "name", Required = true, Default = ".", HelpText = "File name.")]
-        public string FileName { get; set; } = string.Empty;
+        [Option('m', "name", Default = "Chapters.md", HelpText = "File name.")]
+        public string FileName { get; set; } = "Chapters.md";
 
         [Option('v', "verbose",
           Default = false,
           HelpText = "Prints all messages to standard output.")]
-        public bool Verbose { get; set; }
+        public bool Verbose { get; set; } = false;
 
-        [Option('c', "amount", HelpText = "The amount of chapters inside the file..")]
-        public int ChaptersAmount { get; set; }
+        [Option('c', "amount", Default = 5, HelpText = "The amount of chapters inside the file..")]
+        public int ChaptersAmount { get; set; } = 5;
 
-        [Option('s', "sub-amount", HelpText = "The amount of sub-chapters inside each chapter.")]
-        public int SubChaptersAmount { get; set; }
+        [Option('s', "sub-amount", Default = 5, HelpText = "The amount of sub-chapters inside each chapter.")]
+        public int SubChaptersAmount { get; set; } = 5;
+        [Option('t', "title", Default = "Chapter", HelpText = "Custom title name instead of Chapter X")]
+        public string Title { get; set; } = "Chapter";
+
+        [Option("sub-title", Default = "Part", HelpText = "Custom sub-title name instead of Part X.Y")]
+        public string SubTitle { get; set; } = "Part";
     }
 
     private readonly static UConsole Console = new();
@@ -37,7 +42,7 @@ public static class Program
         if (opts.FileName != string.Empty && opts.ChaptersAmount > 0)
         {
             Console.WriteVerboseLine($"Writing {opts.ChaptersAmount} chapters in {opts.FileName} and {opts.SubChaptersAmount} Sub-Chapters ...");
-            Core.ChapterFileWriter.WriteChapterFile(opts.FileName, opts.ChaptersAmount, opts.SubChaptersAmount);
+            Core.ChapterFileWriter.WriteChapterFile(opts.FileName, opts.ChaptersAmount, opts.SubChaptersAmount, opts.Title, opts.SubTitle);
         }
 
     }
