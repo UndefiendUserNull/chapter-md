@@ -3,7 +3,40 @@ namespace ChapterMD.Cli;
 
 public partial class Options
 {
-	[Option("command-name", Default = "Default", HelpText = "Help Text")]
-	public string VariableName {get; set;} = "Default";
+	[Option("name", Default = "Chapters.md", HelpText = "File name")]
+	public string FileName {get; set;} = "Chapters.md";
+
+	[Option("verbose", Default = false, HelpText = "Prints all messages to standard output.")]
+	public bool Verbose {get; set;} = false;
+
+	[Option("sub-amount", Default = 5, HelpText = "The amount of sub-chapters inside each chapter.")]
+	public int SubChaptersAmount {get; set;} = 5;
+
+	[Option("amount", Default = 5, HelpText = "The amount of chapters inside the file..")]
+	public int ChaptersAmount {get; set;} = 5;
+
+	[Option("title", Default = "Chapter", HelpText = "Custom title name instead of Chapter X")]
+	public string Title {get; set;} = "Chapter";
+
+	[Option("sub-title", Default = "Part", HelpText = "Custom sub-title name instead of Part X.Y")]
+	public string SubTitle {get; set;} = "Part";
+
+	[Option("start-from", Default = 1, HelpText = "")]
+	public int StartFrom {get; set;} = 1;
+
+	[Option("start-sub-from", Default = 1, HelpText = "")]
+	public int StartSubFrom {get; set;} = 1;
+
+	[Option("append", Default = true, HelpText = "Adds new lines to existing chapters file continuing from the last chapter.")]
+	public bool Append {get; set;} = true;
+
+	[Option("fresh-append", Default = false, HelpText = "Adds new lines to existing chapters file starting from (StartFrom).")]
+	public bool FreshAppend {get; set;} = false;
+
+	[Option("output", Default = ".", HelpText = "Where the file will be saved.")]
+	public string Output {get; set;} = ".";
+
+	[Option("overwrite", Default = false, HelpText = "Overwrites the existing chapters file.")]
+	public bool Overwrite {get; set;} = false;
 
 }
