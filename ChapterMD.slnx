@@ -1,4 +1,4 @@
 <Solution>
-  <Project Path="./ChapterMD.Core/ChapterMD.Core.csproj"/>
-  <Project Path="./ChapterMD.Cli/ChapterMD.Cli.csproj"/>
+  <Project Path="ChapterMD.Cli/ChapterMD.Cli.csproj" />
+  <Project Path="ChapterMD.Core/ChapterMD.Core.csproj" />
 </Solution>

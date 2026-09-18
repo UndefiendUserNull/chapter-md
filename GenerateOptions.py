@@ -81,7 +81,33 @@ public partial class WriterOptions
         f.write('}')
     print('Alhamdulillah, core options generation completed.')
 
-# TODO: Generate Utils
+def generate_utils():
+    print("Generating Utils ...")
+
+    with open(GENERATED_UTILS_PATH, "w+") as f:
+        f.write("""
+using ChapterMD.Core;
+
+namespace ChapterMD.Cli;
+
+public static partial class Utils
+{
+    public static WriterOptions ToWriterOptions(Options options)
+    {
+        return new WriterOptions
+        {
+""");
+
+        for _, v in prepared_dict.items():
+            vsplit = str(v).split(' ')
+            f.write(f"\t\t\t{vsplit[2]} = options.{vsplit[2]},\n")
+
+        f.write("""
+            };
+        }
+    }
+
+    """)
 
 
 if __name__ == "__main__":
@@ -92,3 +118,4 @@ if __name__ == "__main__":
     
     generate_cli_options()
     generate_core_options()
+    generate_utils()
