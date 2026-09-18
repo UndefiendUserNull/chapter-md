@@ -2,34 +2,30 @@
 
 public static class ChapterFileWriter
 {
-    public static void WriteChapterFile(
-        string fileName,
-        string path,
-        int chaptersAmount,
-        int subChaptersAmount,
-        string title,
-        string subTitle,
-        int startFrom,
-        int startSubFrom,
-        bool append,
-        bool freshAppend)
+    public static void WriteChapterFile(WriterOptions options)
     {
-        if (startFrom > chaptersAmount) throw new Exception("The start from index is bigger than the chapters amount.");
+        bool append = options.FreshAppend ? false : options.Append;
 
-        if (startSubFrom > subChaptersAmount) throw new Exception("The sub start from index is bigger than the sub chapters amount.");
+        if (options.StartFrom > options.ChaptersAmount)
+            throw new Exception("The start from index is bigger than the chapters amount.");
 
-        if (startFrom < 0 || startSubFrom < 0 || subChaptersAmount < 0 || chaptersAmount < 0)
+        if (options.StartSubFrom > options.SubChaptersAmount)
+            throw new Exception("The sub start from index is bigger than the sub chapters amount.");
+
+        if (options.StartFrom < 0 || options.StartSubFrom < 0 ||
+            options.SubChaptersAmount < 0 || options.ChaptersAmount < 0)
         {
             throw new IndexOutOfRangeException("Negative number found in (" +
-            $"startFrom: {startFrom}, startSubFrom: {startSubFrom}, subChaptersAmount: {subChaptersAmount}, chaptersAmount: {chaptersAmount}).");
+                $"startFrom: {options.StartFrom}, startSubFrom: {options.StartSubFrom}, " +
+                $"subChaptersAmount: {options.SubChaptersAmount}, chaptersAmount: {options.ChaptersAmount}).");
         }
 
         try
         {
-            var finalPath = Path.Combine(path, fileName);
+            var finalPath = Path.Combine(options.Path, options.FileName);
             var dir = Path.GetDirectoryName(finalPath);
-            int finalStartFrom = startFrom;
-            int finalChaptersAmount = chaptersAmount;
+            int finalStartFrom = options.StartFrom;
+            int finalChaptersAmount = options.ChaptersAmount;
 
             if (!string.IsNullOrEmpty(dir))
             {
@@ -39,19 +35,20 @@ public static class ChapterFileWriter
 
             if (Path.Exists(finalPath) && append)
             {
-                AppendExistingFile(finalPath, ref finalStartFrom, ref finalChaptersAmount, startFrom);
+                AppendExistingFile(finalPath, ref finalStartFrom, ref finalChaptersAmount, options.StartFrom);
             }
 
-            using var writer = new StreamWriter(finalPath, append: append);
+            using var writer = new StreamWriter(finalPath, append: (append || options.FreshAppend));
 
             for (int i = finalStartFrom; i <= finalChaptersAmount; i++)
             {
-                writer.WriteLine($"- [ ] {title} {i}");
-                if (subChaptersAmount > 0)
+                writer.WriteLine($"- [ ] {options.Title} {i}");
+
+                if (options.SubChaptersAmount > 0)
                 {
-                    for (int j = startSubFrom; j <= subChaptersAmount; j++)
+                    for (int j = options.StartSubFrom; j <= options.SubChaptersAmount; j++)
                     {
-                        writer.WriteLine($"\t- [ ] {subTitle} {i}.{j}");
+                        writer.WriteLine($"\t- [ ] {options.SubTitle} {i}.{j}");
                     }
                 }
             }
