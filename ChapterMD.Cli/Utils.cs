@@ -2,14 +2,14 @@
 
 namespace ChapterMD.Cli;
 
-public static class Utils
+public static partial class Utils
 {
     public static WriterOptions ToWriterOptions(Options options)
     {
         return new WriterOptions
         {
             FileName = options.FileName,
-            Path = options.Path,
+            Path = options.Output,
             ChaptersAmount = options.ChaptersAmount,
             SubChaptersAmount = options.SubChaptersAmount,
             Title = options.Title,

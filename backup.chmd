@@ -1,0 +1,35 @@
+["name", "File name"]
+string FileName = "Chapters.md"
+
+["verbose", "Prints all messages to standard output.", CLI]
+bool Verbose = false
+
+["sub-amount", "The amount of sub-chapters inside each chapter.")]
+int SubChaptersAmount = 5
+
+[Option("amount", Default = 5, HelpText = "The amount of chapters inside the file..")]
+int ChaptersAmount
+
+[Option("title", Default = "Chapter", HelpText = "Custom title name instead of Chapter X")]
+string Title
+
+[Option("sub-title", Default = "Part", HelpText = "Custom sub-title name instead of Part X.Y")]
+string SubTitle
+
+[Option("start-from", Default = 1)]
+int StartFrom
+
+[Option("start-sub-from", Default = 1)]
+int StartSubFrom
+
+[Option("append", Default = true, HelpText = "Adds new lines to existing chapters file continuing from the last chapter.")]
+bool Append
+
+[Option("fresh-append", Default = false, HelpText = "Adds new lines to existing chapters file starting from (StartFrom).")]
+bool FreshAppend
+
+[Option("output", Default = ".", HelpText = "Where the file will be saved.")]
+string Output
+
+[Option("overwrite", Default = false, HelpText = "Overwrites the existing chapters file.")]
+bool Overwrite

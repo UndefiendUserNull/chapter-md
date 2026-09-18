@@ -1,6 +1,6 @@
 ﻿namespace ChapterMD.Core;
 
-public class WriterOptions
+public partial class WriterOptions
 {
     public string FileName { get; set; } = string.Empty;
     public string Path { get; set; } = string.Empty;
