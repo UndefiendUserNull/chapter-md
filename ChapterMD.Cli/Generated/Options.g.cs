@@ -1,5 +1,4 @@
 using CommandLine;
-
 namespace ChapterMD.Cli;
 
 public partial class Options
