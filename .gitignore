@@ -2,3 +2,6 @@
 .vscode/
 obj/
 bin/
+*/Properties/
+*.csproj.user
+ChapterMD.Cli/ChapterMD.Cli.csproj.user

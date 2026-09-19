@@ -20,9 +20,11 @@ public static class ChapterFileWriter
                 $"subChaptersAmount: {options.SubChaptersAmount}, chaptersAmount: {options.ChaptersAmount}).");
         }
 
+        if (!options.FileName.EndsWith(".md")) options.FileName += ".md";
+
         try
         {
-            var finalPath = Path.Combine(options.Path, options.FileName);
+            var finalPath = Path.Combine(options.Output, options.FileName);
             var dir = Path.GetDirectoryName(finalPath);
             int finalStartFrom = options.StartFrom;
             int finalChaptersAmount = options.ChaptersAmount;

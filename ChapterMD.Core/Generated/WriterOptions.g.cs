@@ -9,7 +9,7 @@
 namespace ChapterMD.Core;
 
 public partial class WriterOptions {
-
+	
 	public string FileName {get; set;} = "Chapters.md";
 
 	public bool Verbose {get; set;} = false;
