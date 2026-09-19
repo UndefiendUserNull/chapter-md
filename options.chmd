@@ -13,7 +13,7 @@ int ChaptersAmount = 5
 ["title", "Custom title name instead of Chapter X", ]
 string Title = "Chapter"
 
-["sub-title", "Custom sub-title name instead of Part X.Y", ]
+["sub-title", "Custom sub-title name instead of Part X", ]
 string SubTitle = "Part"
 
 ["start-from", "", ]

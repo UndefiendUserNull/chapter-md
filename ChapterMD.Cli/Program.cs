@@ -8,6 +8,11 @@ public static class Program
 
     static int Main(string[] args)
     {
+        if (args.Length == 0)
+        {
+            Console.WriteLine("No args provided, generating default template.");
+            Console.PressToContinue();
+        }
         return Parser.Default.ParseArguments<Options>(args)
         .MapResult(
         opts => { RunOptions(opts); return 0; },
@@ -22,6 +27,7 @@ public static class Program
             Core.ChapterFileWriter.WriteChapterFile(Utils.ToWriterOptions(opts));
         }
 
+        Console.PressToContinue();
     }
     static void HandleParseError(IEnumerable<Error> errs)
     {

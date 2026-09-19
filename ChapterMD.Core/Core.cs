@@ -4,8 +4,8 @@ public static class ChapterFileWriter
 {
     public static void WriteChapterFile(WriterOptions options)
     {
-        bool append = options.FreshAppend ? false : options.Append;
-
+        bool append = !options.Overwrite;
+        Console.WriteLine(append);
         if (options.StartFrom > options.ChaptersAmount)
             throw new Exception("The start from index is bigger than the chapters amount.");
 
@@ -31,16 +31,15 @@ public static class ChapterFileWriter
 
             if (!string.IsNullOrEmpty(dir))
             {
-                Console.WriteLine($"Creating {dir}");
                 Directory.CreateDirectory(dir);
             }
 
-            if (Path.Exists(finalPath) && append)
+            if (Path.Exists(finalPath) && append && !options.FreshAppend)
             {
                 AppendExistingFile(finalPath, ref finalStartFrom, ref finalChaptersAmount, options.StartFrom);
             }
 
-            using var writer = new StreamWriter(finalPath, append: (append || options.FreshAppend));
+            using var writer = new StreamWriter(finalPath, append: append || options.FreshAppend);
 
             for (int i = finalStartFrom; i <= finalChaptersAmount; i++)
             {
@@ -50,10 +49,12 @@ public static class ChapterFileWriter
                 {
                     for (int j = options.StartSubFrom; j <= options.SubChaptersAmount; j++)
                     {
-                        writer.WriteLine($"\t- [ ] {options.SubTitle} {i}.{j}");
+                        writer.WriteLine($"\t- [ ] {options.SubTitle} {j}");
                     }
                 }
             }
+
+            Console.WriteLine($"Generated {options.FileName} at {finalPath}.");
         }
         catch (Exception)
         {
@@ -87,5 +88,4 @@ public static class ChapterFileWriter
         }
         Console.WriteLine($"Start from = {finalStartFrom}");
     }
-
 }

@@ -27,7 +27,7 @@ public partial class Options {
 	[Option("title", Default = "Chapter", HelpText = "Custom title name instead of Chapter X")]
 	public string Title {get; set;} = "Chapter";
 
-	[Option("sub-title", Default = "Part", HelpText = "Custom sub-title name instead of Part X.Y")]
+	[Option("sub-title", Default = "Part", HelpText = "Custom sub-title name instead of Part X")]
 	public string SubTitle {get; set;} = "Part";
 
 	[Option("start-from", Default = 1, HelpText = "")]
