@@ -1,13 +1,13 @@
 ﻿namespace ChapterMD.Cli;
 
-public class UConsole(bool verbose = false)
+public class UConsole(bool verbose = false, bool skip = false)
 {
-    private bool _verbose = verbose;
-    private bool _skipPressToContinue = false;
+    public bool Verbose { get; set; } = verbose;
+    public bool SkipPressToContinue { get; set; } = skip;
 
     public void WriteVerboseLine(object msg)
     {
-        if (_verbose) WriteLine(msg);
+        if (Verbose) WriteLine(msg);
     }
 
     public void WriteLine(object msg)
@@ -17,10 +17,8 @@ public class UConsole(bool verbose = false)
 
     public void PressToContinue()
     {
-        if (_skipPressToContinue) return;
+        if (SkipPressToContinue) return;
         WriteLine("Press any key to continue ...");
         Console.ReadKey(true);
     }
-
-    public void SetVerbose(bool value) => _verbose = value;
 }

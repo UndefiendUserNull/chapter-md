@@ -21,6 +21,7 @@ public static partial class Utils
 			FreshAppend = options.FreshAppend,
 			Output = options.Output,
 			Overwrite = options.Overwrite,
+			SkipConfirm = options.SkipConfirm,
 
             };
         }

@@ -34,4 +34,6 @@ public partial class WriterOptions {
 
 	public bool Overwrite {get; set;} = false;
 
+	public bool SkipConfirm {get; set;} = false;
+
 }

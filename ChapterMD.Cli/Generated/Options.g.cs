@@ -48,4 +48,7 @@ public partial class Options {
 	[Option("overwrite", Default = false, HelpText = "Overwrites the existing chapters file.")]
 	public bool Overwrite {get; set;} = false;
 
+	[Option("skip-confirm", Default = false, HelpText = "Skips all \"Press To Continue\" prompts")]
+	public bool SkipConfirm {get; set;} = false;
+
 }

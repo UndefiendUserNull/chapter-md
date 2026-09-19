@@ -33,3 +33,8 @@ string Output = "."
 
 ["overwrite", "Overwrites the existing chapters file.", ]
 bool Overwrite = false
+
+["skip-confirm", "Skips all \"Press To Continue\" prompts", ]
+bool SkipConfirm = false
+
+# Marked, Numbering type "Romanian, Decimal, etc", bullet, tab size

@@ -11,7 +11,6 @@ public static class Program
         if (args.Length == 0)
         {
             Console.WriteLine("No args provided, generating default template.");
-            Console.PressToContinue();
         }
         return Parser.Default.ParseArguments<Options>(args)
         .MapResult(
@@ -20,7 +19,9 @@ public static class Program
     }
     static void RunOptions(Options opts)
     {
-        Console.SetVerbose(opts.Verbose);
+        Console.Verbose = opts.Verbose;
+        Console.SkipPressToContinue = opts.SkipConfirm;
+
         if (opts.FileName != string.Empty && opts.ChaptersAmount > 0)
         {
             Console.WriteVerboseLine($"Writing {opts.ChaptersAmount} chapters in {opts.FileName} and {opts.SubChaptersAmount} Sub-Chapters ...");
@@ -31,7 +32,6 @@ public static class Program
     }
     static void HandleParseError(IEnumerable<Error> errs)
     {
-        Console.WriteLine("You didn't provide enough arguments.");
         using var writer = new StreamWriter("chmd_errors.log", append: false);
         foreach (var item in errs)
         {

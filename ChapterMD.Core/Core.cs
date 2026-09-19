@@ -5,7 +5,7 @@ public static class ChapterFileWriter
     public static void WriteChapterFile(WriterOptions options)
     {
         bool append = !options.Overwrite;
-        Console.WriteLine(append);
+
         if (options.StartFrom > options.ChaptersAmount)
             throw new Exception("The start from index is bigger than the chapters amount.");
 
