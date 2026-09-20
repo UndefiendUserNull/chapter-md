@@ -28,7 +28,7 @@ def read_unprepared():
 def prepare_dict():
     print("Setting up final dictionary ...")
     for k, v in unprepared_dict.items():
-        attribute_clean = str(k).removeprefix("[").removesuffix("]").split(",")
+        attribute_clean = str(k).removeprefix("[").removesuffix("]").split(",,,")
         command = attribute_clean[0]
         help_text = attribute_clean[1]
 

@@ -2,5 +2,4 @@
 .vscode/
 obj/
 bin/
-*.csproj.user
-ChapterMD.Cli/ChapterMD.Cli.csproj.user
+ChapterMD.Cli/Properties/PublishProfiles/FolderProfile.pubxml.user
