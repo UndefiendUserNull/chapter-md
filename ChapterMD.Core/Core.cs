@@ -49,9 +49,6 @@ public static class ChapterFileWriter
 
                     lines = sr.ReadToEnd().Split("\r\t");
 
-                    foreach (string line in lines)
-                        Console.WriteLine(line);
-
                     for (int i = 0; i < lines.Length; i++)
                     {
                         if (lines[i].Contains($"[X]"))
@@ -76,19 +73,23 @@ public static class ChapterFileWriter
 
             for (int i = finalStartFrom; i <= finalChaptersAmount; i++)
             {
+                string styledChapterNumber = Utils.ConvertDecimalToNumberType(i, options.NumberingType);
+
                 if (options.Marked && i >= options.MarkedFrom)
-                    writer.WriteLine($"- [{markedStr}] {options.Title} {i}");
+                    writer.WriteLine($"- [{markedStr}] {options.Title} {styledChapterNumber}");
                 else
-                    writer.WriteLine($"- [ ] {options.Title} {i}");
+                    writer.WriteLine($"- [ ] {options.Title} {styledChapterNumber}");
 
                 if (options.SubChaptersAmount > 0)
                 {
                     for (int j = options.StartSubFrom; j <= options.SubChaptersAmount; j++)
                     {
+                        string styledSubChapterNumber = Utils.ConvertDecimalToNumberType(j, options.NumberingType);
+
                         if (options.SubMarked && j >= options.SubMarkedFrom)
-                            writer.WriteLine($"\t- [{markedStr}] {options.SubTitle} {j}");
+                            writer.WriteLine($"\t- [{markedStr}] {options.SubTitle} {styledSubChapterNumber}");
                         else
-                            writer.WriteLine($"\t- [ ] {options.SubTitle} {j}");
+                            writer.WriteLine($"\t- [ ] {options.SubTitle} {styledSubChapterNumber}");
                     }
                 }
             }

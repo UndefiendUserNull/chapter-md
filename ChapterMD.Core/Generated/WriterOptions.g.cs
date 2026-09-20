@@ -46,4 +46,8 @@ public partial class WriterOptions {
 
 	public bool Unmark {get; set;} = false;
 
+	public int TabSize {get; set;} = 4;
+
+	public ChapterMD.Core.NumberingType NumberingType {get; set;} = ChapterMD.Core.NumberingType.English;
+
 }
