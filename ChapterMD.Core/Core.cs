@@ -2,8 +2,12 @@
 
 public static class ChapterFileWriter
 {
+    private static readonly UConsole Console = new();
     public static void WriteChapterFile(WriterOptions options)
     {
+        Console.Verbose = options.Verbose;
+        Console.SkipPressToContinue = options.SkipConfirm;
+
         bool append = !options.Overwrite;
 
         if (options.StartFrom > options.ChaptersAmount)
@@ -104,12 +108,12 @@ public static class ChapterFileWriter
     }
     public static void AppendExistingFile(string finalPath, ref int finalStartFrom, ref int finalChaptersAmount, int startFrom)
     {
-        Console.WriteLine($"File at {finalPath} already exists and option append is used.");
+        Console.WriteVerboseLine($"File at {finalPath} already exists and option append is used.");
         string[] data = File.ReadAllLines(finalPath);
 
         if (data.Length == 0)
         {
-            Console.WriteLine("File found was empty.");
+            Console.WriteVerboseLine("File found was empty.");
             return;
         }
 
@@ -119,13 +123,13 @@ public static class ChapterFileWriter
         {
             finalStartFrom = parsed + 1;
             finalChaptersAmount += finalChaptersAmount;
-            Console.WriteLine($"Last chapter found = {finalStartFrom}");
+            Console.WriteVerboseLine($"Last chapter found = {finalStartFrom}");
         }
         else
         {
             finalStartFrom = startFrom;
-            Console.WriteLine($"Start from didn't change ({startFrom})");
+            Console.WriteVerboseLine($"Start from didn't change ({startFrom})");
         }
-        Console.WriteLine($"Start from = {finalStartFrom}");
+        Console.WriteVerboseLine($"Start from = {finalStartFrom}");
     }
 }

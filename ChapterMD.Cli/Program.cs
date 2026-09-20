@@ -1,4 +1,5 @@
-﻿using CommandLine;
+﻿using ChapterMD.Core;
+using CommandLine;
 
 namespace ChapterMD.Cli;
 

@@ -1,4 +1,4 @@
-﻿namespace ChapterMD.Cli;
+﻿namespace ChapterMD.Core;
 
 public class UConsole(bool verbose = false, bool skip = false)
 {

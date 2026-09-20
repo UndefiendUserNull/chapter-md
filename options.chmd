@@ -57,5 +57,3 @@ int TabSize = 4
 
 ["numbering-type",,, "Specify numbering type (English, Romanian, Arabic) numbers."]
 ChapterMD.Core.NumberingType NumberingType = ChapterMD.Core.NumberingType.EnglishNumbers
-
-# Numbering type "Romanian, Decimal, etc" bullet, tab size
