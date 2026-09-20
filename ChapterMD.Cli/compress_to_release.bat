@@ -87,7 +87,7 @@ if "%VERSION%"=="" (
     exit /b 1
 )
 
-set "OUTDIR=Archives"
+set "OUTDIR=../Archives"
 for %%I in ("%OUTDIR%") do set "OUTDIR=%%~fI"
 if not exist "%OUTDIR%" mkdir "%OUTDIR%"
 set "ARCHIVE=%OUTDIR%\CHMD.Cli-v%VERSION%-x64.7z"
