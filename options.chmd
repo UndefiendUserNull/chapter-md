@@ -34,7 +34,22 @@ string Output = "."
 ["overwrite", "Overwrites the existing chapters file.", ]
 bool Overwrite = false
 
-["skip-confirm", "Skips all \"Press To Continue\" prompts", ]
+["skip-confirm", "Skips all \"Press To Continue\" prompts.", ]
 bool SkipConfirm = false
 
+["marked", "Generates chapters as marked."]
+bool Marked = false
+
+["marked-from", "Start marking chapters from."]
+int MarkedFrom = 0
+
+["sub-marked", "Generates sub-chapters as marked."]
+bool SubMarked = false
+
+["sub-marked-from", "Start marking sub-chapters from."]
+int SubMarkedFrom = 0
+
+["unmark", "Un-marks the existing chapters file."]
+bool Unmark = false
+ 
 # Marked, Numbering type "Romanian, Decimal, etc", bullet, tab size

@@ -5,7 +5,7 @@
     },
     "CLI Default": {
       "commandName": "Project",
-      "commandLineArgs": "--name \"IS Chapters.md\" --verbose --amount 7 --sub-amount 2 --title \"IS: Chapter\" --sub-title \"IS: Part\" --fresh-append"
+      "commandLineArgs": "--name \"IS Chapters.md\" --verbose --amount 7 --sub-amount 2 --title \"IS: Chapter\" --sub-title \"IS: Part\" --unmark"
     }
   }
 }

@@ -36,4 +36,14 @@ public partial class WriterOptions {
 
 	public bool SkipConfirm {get; set;} = false;
 
+	public bool Marked {get; set;} = false;
+
+	public int MarkedFrom {get; set;} = 0;
+
+	public bool SubMarked {get; set;} = false;
+
+	public int SubMarkedFrom {get; set;} = 0;
+
+	public bool Unmark {get; set;} = false;
+
 }

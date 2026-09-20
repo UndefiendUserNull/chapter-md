@@ -22,6 +22,11 @@ public static partial class Utils
 			Output = options.Output,
 			Overwrite = options.Overwrite,
 			SkipConfirm = options.SkipConfirm,
+			Marked = options.Marked,
+			MarkedFrom = options.MarkedFrom,
+			SubMarked = options.SubMarked,
+			SubMarkedFrom = options.SubMarkedFrom,
+			Unmark = options.Unmark,
 
             };
         }

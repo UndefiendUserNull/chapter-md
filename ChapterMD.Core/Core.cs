@@ -28,6 +28,7 @@ public static class ChapterFileWriter
             var dir = Path.GetDirectoryName(finalPath);
             int finalStartFrom = options.StartFrom;
             int finalChaptersAmount = options.ChaptersAmount;
+            string markedStr = options.Marked ? "X" : " ";
 
             if (!string.IsNullOrEmpty(dir))
             {
@@ -39,17 +40,55 @@ public static class ChapterFileWriter
                 AppendExistingFile(finalPath, ref finalStartFrom, ref finalChaptersAmount, options.StartFrom);
             }
 
+            if (options.Unmark)
+            {
+                string[] lines = [];
+
+                {
+                    using StreamReader sr = new(finalPath);
+
+                    lines = sr.ReadToEnd().Split("\r\t");
+
+                    foreach (string line in lines)
+                        Console.WriteLine(line);
+
+                    for (int i = 0; i < lines.Length; i++)
+                    {
+                        if (lines[i].Contains($"[X]"))
+                        {
+                            lines[i] = lines[i].Replace("[X]", "[ ]");
+                        }
+                    }
+                }
+
+                using var wr = new StreamWriter(finalPath);
+
+
+                foreach (var line in lines)
+                {
+                    wr.WriteLine(line);
+                }
+
+                return;
+            }
+
             using var writer = new StreamWriter(finalPath, append: append || options.FreshAppend);
 
             for (int i = finalStartFrom; i <= finalChaptersAmount; i++)
             {
-                writer.WriteLine($"- [ ] {options.Title} {i}");
+                if (options.Marked && i >= options.MarkedFrom)
+                    writer.WriteLine($"- [{markedStr}] {options.Title} {i}");
+                else
+                    writer.WriteLine($"- [ ] {options.Title} {i}");
 
                 if (options.SubChaptersAmount > 0)
                 {
                     for (int j = options.StartSubFrom; j <= options.SubChaptersAmount; j++)
                     {
-                        writer.WriteLine($"\t- [ ] {options.SubTitle} {j}");
+                        if (options.SubMarked && j >= options.SubMarkedFrom)
+                            writer.WriteLine($"\t- [{markedStr}] {options.SubTitle} {j}");
+                        else
+                            writer.WriteLine($"\t- [ ] {options.SubTitle} {j}");
                     }
                 }
             }

@@ -48,7 +48,22 @@ public partial class Options {
 	[Option("overwrite", Default = false, HelpText = "Overwrites the existing chapters file.")]
 	public bool Overwrite {get; set;} = false;
 
-	[Option("skip-confirm", Default = false, HelpText = "Skips all \"Press To Continue\" prompts")]
+	[Option("skip-confirm", Default = false, HelpText = "Skips all \"Press To Continue\" prompts.")]
 	public bool SkipConfirm {get; set;} = false;
+
+	[Option("marked", Default = false, HelpText = "Generates chapters as marked.")]
+	public bool Marked {get; set;} = false;
+
+	[Option("marked-from", Default = 0, HelpText = "Start marking chapters from.")]
+	public int MarkedFrom {get; set;} = 0;
+
+	[Option("sub-marked", Default = false, HelpText = "Generates sub-chapters as marked.")]
+	public bool SubMarked {get; set;} = false;
+
+	[Option("sub-marked-from", Default = 0, HelpText = "Start marking sub-chapters from.")]
+	public int SubMarkedFrom {get; set;} = 0;
+
+	[Option("unmark", Default = false, HelpText = "Un-marks the existing chapters file.")]
+	public bool Unmark {get; set;} = false;
 
 }
