@@ -3,3 +3,4 @@
 obj/
 bin/
 ChapterMD.Cli/Properties/PublishProfiles/FolderProfile.pubxml.user
+**/Archives/
