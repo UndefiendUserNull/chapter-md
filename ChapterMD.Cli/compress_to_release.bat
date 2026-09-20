@@ -4,7 +4,7 @@ setlocal enabledelayedexpansion
 REM ============================================================
 REM
 REM
-REM  Vibe coded sorry ??.
+REM  Vibe coded sorry :pray:.
 REM
 REM
 REM  Usage:
@@ -90,7 +90,7 @@ if "%VERSION%"=="" (
 set "OUTDIR=Archives"
 for %%I in ("%OUTDIR%") do set "OUTDIR=%%~fI"
 if not exist "%OUTDIR%" mkdir "%OUTDIR%"
-set "ARCHIVE=%OUTDIR%\CHMD.Cli.v.%VERSION%.7z"
+set "ARCHIVE=%OUTDIR%\CHMD.Cli-v%VERSION%-x64.7z"
 
 REM --- Warn if archive already exists ---
 if exist "%ARCHIVE%" (
