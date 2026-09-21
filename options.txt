@@ -52,8 +52,8 @@ int SubMarkedFrom = 0
 ["unmark",,, "Un-marks the existing chapters file."]
 bool Unmark = false
 
-["tab-size",,, "Specify the tab size for sub-chapters."]
-int TabSize = 4
+["sub-chapter-style",,, "Specify the style of sub-chapters (XAndY, XOnly, YOnly, None)."]
+ChapterMD.Core.SubChapterStyleType SubChapterStyleType = ChapterMD.Core.SubChapterStyleType.XAndY
 
 ["numbering-type",,, "Specify numbering type (English, Romanian, Arabic) numbers."]
-ChapterMD.Core.NumberingType NumberingType = ChapterMD.Core.NumberingType.EnglishNumbers
+ChapterMD.Core.NumberingType NumberingType = ChapterMD.Core.NumberingType.English

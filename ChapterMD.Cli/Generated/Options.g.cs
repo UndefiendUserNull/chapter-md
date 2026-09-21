@@ -66,8 +66,8 @@ public partial class Options {
 	[Option("unmark", Default = false, HelpText = "Un-marks the existing chapters file.")]
 	public bool Unmark {get; set;} = false;
 
-	[Option("tab-size", Default = 4, HelpText = "Specify the tab size for sub-chapters.")]
-	public int TabSize {get; set;} = 4;
+	[Option("sub-chapter-style", Default = ChapterMD.Core.SubChapterStyleType.XAndY, HelpText = "Specify the style of sub-chapters (XAndY, XOnly, YOnly, None).")]
+	public ChapterMD.Core.SubChapterStyleType SubChapterStyleType {get; set;} = ChapterMD.Core.SubChapterStyleType.XAndY;
 
 	[Option("numbering-type", Default = ChapterMD.Core.NumberingType.English, HelpText = "Specify numbering type (English, Romanian, Arabic) numbers.")]
 	public ChapterMD.Core.NumberingType NumberingType {get; set;} = ChapterMD.Core.NumberingType.English;

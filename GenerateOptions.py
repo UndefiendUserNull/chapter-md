@@ -1,6 +1,6 @@
 import os
 
-OPTIONS_FILE_PATH = "./options.chmd"
+OPTIONS_FILE_PATH = "./options.txt"
 
 unprepared_dict = dict()
 prepared_dict = dict()
