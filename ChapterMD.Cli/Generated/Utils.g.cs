@@ -27,7 +27,7 @@ public static partial class Utils
 			SubMarked = options.SubMarked,
 			SubMarkedFrom = options.SubMarkedFrom,
 			Unmark = options.Unmark,
-			TabSize = options.TabSize,
+			SubChapterStyleType = options.SubChapterStyleType,
 			NumberingType = options.NumberingType,
 
             };

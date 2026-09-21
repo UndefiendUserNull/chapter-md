@@ -19,7 +19,6 @@ public static class ChapterFileWriter
             var dir = Path.GetDirectoryName(finalPath);
             int finalStartFrom = options.StartFrom;
             int finalChaptersAmount = options.ChaptersAmount;
-            string markedStr = options.Marked ? "X" : " ";
 
             if (!string.IsNullOrEmpty(dir))
             {
@@ -66,21 +65,28 @@ public static class ChapterFileWriter
             {
                 string styledChapterNumber = Utils.ConvertDecimalToNumberType(i + finalStartFrom, options.NumberingType);
 
-                if (options.Marked && i >= options.MarkedFrom)
-                    writer.WriteLine($"- [{markedStr}] {options.Title} {styledChapterNumber}");
-                else
-                    writer.WriteLine($"- [ ] {options.Title} {styledChapterNumber}");
+                writer.WriteLine($"- [{GetMarkedString(i, options.MarkedFrom, options.Marked)}] {options.Title} {styledChapterNumber}");
 
                 if (options.SubChaptersAmount > 0)
                 {
                     for (int j = options.StartSubFrom; j < options.SubChaptersAmount; j++)
                     {
                         string styledSubChapterNumber = Utils.ConvertDecimalToNumberType(j, options.NumberingType);
-
-                        if (options.SubMarked && j >= options.SubMarkedFrom)
-                            writer.WriteLine($"\t- [{markedStr}] {options.SubTitle} {styledSubChapterNumber}");
-                        else
-                            writer.WriteLine($"\t- [ ] {options.SubTitle} {styledSubChapterNumber}");
+                        switch (options.SubChapterStyleType)
+                        {
+                            case SubChapterStyleType.XAndY:
+                                writer.WriteLine($"\t- [{GetMarkedString(i, options.SubMarkedFrom, options.SubMarked)}] {options.SubTitle} {styledChapterNumber}.{styledSubChapterNumber}");
+                                break;
+                            case SubChapterStyleType.XOnly:
+                                writer.WriteLine($"\t- [{GetMarkedString(i, options.SubMarkedFrom, options.SubMarked)}] {options.SubTitle} {styledChapterNumber}");
+                                break;
+                            case SubChapterStyleType.YOnly:
+                                writer.WriteLine($"\t- [{GetMarkedString(i, options.SubMarkedFrom, options.SubMarked)}] {options.SubTitle} {styledSubChapterNumber}");
+                                break;
+                            case SubChapterStyleType.None:
+                                writer.WriteLine($"\t- [{GetMarkedString(i, options.SubMarkedFrom, options.SubMarked)}] {options.SubTitle}");
+                                break;
+                        }
                     }
                 }
             }
@@ -140,5 +146,12 @@ public static class ChapterFileWriter
         }
 
         if (!options.FileName.EndsWith(".md")) options.FileName += ".md";
+    }
+
+    private static string? GetMarkedString(int i, int markedFrom, bool useMarked)
+    {
+        if (!useMarked) return null;
+
+        return i >= markedFrom ? "X" : " ";
     }
 }
