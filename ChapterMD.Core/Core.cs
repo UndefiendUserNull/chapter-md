@@ -75,9 +75,9 @@ public static class ChapterFileWriter
 
             using var writer = new StreamWriter(finalPath, append: append || options.FreshAppend);
 
-            for (int i = finalStartFrom; i <= finalChaptersAmount; i++)
+            for (int i = 0; i < finalChaptersAmount; i++)
             {
-                string styledChapterNumber = Utils.ConvertDecimalToNumberType(i, options.NumberingType);
+                string styledChapterNumber = Utils.ConvertDecimalToNumberType(i + finalStartFrom, options.NumberingType);
 
                 if (options.Marked && i >= options.MarkedFrom)
                     writer.WriteLine($"- [{markedStr}] {options.Title} {styledChapterNumber}");
@@ -86,7 +86,7 @@ public static class ChapterFileWriter
 
                 if (options.SubChaptersAmount > 0)
                 {
-                    for (int j = options.StartSubFrom; j <= options.SubChaptersAmount; j++)
+                    for (int j = options.StartSubFrom; j < options.SubChaptersAmount; j++)
                     {
                         string styledSubChapterNumber = Utils.ConvertDecimalToNumberType(j, options.NumberingType);
 
@@ -119,14 +119,17 @@ public static class ChapterFileWriter
 
         var lastChapter = data.Last(x => !x.StartsWith('\t')).Split(' ');
 
-        if (int.TryParse(lastChapter[lastChapter.Length - 1], out int parsed))
+
+        try
         {
+            int parsed = Utils.RevertNumberTypeToDecimal(lastChapter[lastChapter.Length - 1]);
+
             finalStartFrom = parsed + 1;
-            finalChaptersAmount += finalChaptersAmount;
             Console.WriteVerboseLine($"Last chapter found = {finalStartFrom}");
         }
-        else
+        catch
         {
+            Console.WriteLine($"Couldn't find the last chapter in {finalPath}, using fresh append instead.");
             finalStartFrom = startFrom;
             Console.WriteVerboseLine($"Start from didn't change ({startFrom})");
         }
