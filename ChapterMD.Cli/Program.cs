@@ -16,7 +16,7 @@ public static class Program
         return Parser.Default.ParseArguments<Options>(args)
         .MapResult(
         opts => { RunOptions(opts); return 0; },
-        errs => { HandleParseError(errs); return 1; });
+        errs => { ReportParseResult(errs); return 1; });
     }
     static void RunOptions(Options opts)
     {
@@ -31,14 +31,57 @@ public static class Program
 
         Console.PressToContinue();
     }
-    static void HandleParseError(IEnumerable<Error> errs)
+    static int ReportParseResult(IEnumerable<Error> errs)
     {
-        using var writer = new StreamWriter("chmd_errors.log", append: false);
-        foreach (var item in errs)
+        var errors = errs.ToList();
+
+        foreach (var e in errors)
         {
-            writer.WriteLine(item);
+            switch (e)
+            {
+                case HelpRequestedError:
+                case VersionRequestedError:
+                    return 0;
+
+                case HelpVerbRequestedError hve when hve.Matched:
+                    return 0;
+
+                case HelpVerbRequestedError hve:
+                    System.Console.Error.WriteLine($"Unknown help topic: '{hve.Verb}'.");
+                    return 2;
+
+                case BadFormatConversionError badFmt:
+                    System.Console.Error.WriteLine(
+                        $"Option '{badFmt.NameInfo.NameText}' has an invalid value.");
+                    break;
+
+                case UnknownOptionError unknown:
+                    System.Console.Error.WriteLine($"'{unknown.Token}' is not a recognized option.");
+                    break;
+
+                case MissingRequiredOptionError req:
+                    System.Console.Error.WriteLine($"Required option '{req.NameInfo.NameText}' is missing.");
+                    break;
+
+                case MissingValueOptionError noVal:
+                    System.Console.Error.WriteLine($"Option '{noVal.NameInfo.NameText}' requires a value.");
+                    break;
+
+                case RepeatedOptionError dup:
+                    System.Console.Error.WriteLine($"Option '{dup.NameInfo.NameText}' was specified more than once.");
+                    break;
+
+                case SetValueExceptionError setEx:
+                    System.Console.Error.WriteLine($"Option '{setEx.NameInfo.NameText}' failed: {setEx.Exception.Message}");
+                    break;
+
+                default:
+                    System.Console.Error.WriteLine($"Error: {e.Tag}");
+                    break;
+            }
         }
 
+        System.Console.Error.WriteLine("Try '--help' for usage.");
+        return 2;
     }
-
 }
