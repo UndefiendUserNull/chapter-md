@@ -10,21 +10,8 @@ public static class ChapterFileWriter
 
         bool append = !options.Overwrite;
 
-        if (options.StartFrom > options.ChaptersAmount)
-            throw new Exception("The start from index is bigger than the chapters amount.");
+        HandleConflicts(options);
 
-        if (options.StartSubFrom > options.SubChaptersAmount)
-            throw new Exception("The sub start from index is bigger than the sub chapters amount.");
-
-        if (options.StartFrom < 0 || options.StartSubFrom < 0 ||
-            options.SubChaptersAmount < 0 || options.ChaptersAmount < 0)
-        {
-            throw new IndexOutOfRangeException("Negative number found in (" +
-                $"startFrom: {options.StartFrom}, startSubFrom: {options.StartSubFrom}, " +
-                $"subChaptersAmount: {options.SubChaptersAmount}, chaptersAmount: {options.ChaptersAmount}).");
-        }
-
-        if (!options.FileName.EndsWith(".md")) options.FileName += ".md";
 
         try
         {
@@ -51,7 +38,7 @@ public static class ChapterFileWriter
                 {
                     using StreamReader sr = new(finalPath);
 
-                    lines = sr.ReadToEnd().Split("\r\t");
+                    lines = sr.ReadToEnd().Split("\n");
 
                     for (int i = 0; i < lines.Length; i++)
                     {
@@ -67,7 +54,7 @@ public static class ChapterFileWriter
 
                 foreach (var line in lines)
                 {
-                    wr.WriteLine(line);
+                    wr.Write(line);
                 }
 
                 return;
@@ -134,5 +121,24 @@ public static class ChapterFileWriter
             Console.WriteVerboseLine($"Start from didn't change ({startFrom})");
         }
         Console.WriteVerboseLine($"Start from = {finalStartFrom}");
+    }
+
+    private static void HandleConflicts(WriterOptions options)
+    {
+        if (options.StartFrom > options.ChaptersAmount)
+            throw new Exception("The start from index is bigger than the chapters amount.");
+
+        if (options.StartSubFrom > options.SubChaptersAmount)
+            throw new Exception("The sub start from index is bigger than the sub chapters amount.");
+
+        if (options.StartFrom < 0 || options.StartSubFrom < 0 ||
+            options.SubChaptersAmount < 0 || options.ChaptersAmount < 0)
+        {
+            throw new IndexOutOfRangeException("Negative number found in (" +
+                $"startFrom: {options.StartFrom}, startSubFrom: {options.StartSubFrom}, " +
+                $"subChaptersAmount: {options.SubChaptersAmount}, chaptersAmount: {options.ChaptersAmount}).");
+        }
+
+        if (!options.FileName.EndsWith(".md")) options.FileName += ".md";
     }
 }
