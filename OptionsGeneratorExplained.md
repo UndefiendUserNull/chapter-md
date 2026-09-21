@@ -1,8 +1,6 @@
-# CHMD
+# Options Generator Explained
 
-CHMD is a small DSL for declaring CLI options, which a generator script expands into C# source files.
-
-## Format
+## `options.txt` Format
 
 Each entry is two lines, separated by a blank line:
 
@@ -33,9 +31,9 @@ public string FileName { get; set; } = "Chapters.md";
 
 ## How to use:
 
-1.  Add your options in "options.chmd", or create one, for example i will put these two.
+1.  Add your options in "options.txt", or create one, for example i will put these two.
 
-    `options.chmd` :
+    `options.txt` :
 
 ```cs
 ["name", "File name"]
