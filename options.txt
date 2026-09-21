@@ -55,5 +55,5 @@ bool Unmark = false
 ["sub-chapter-style",,, "Specify the style of sub-chapters (XAndY, XOnly, YOnly, None)."]
 ChapterMD.Core.SubChapterStyleType SubChapterStyleType = ChapterMD.Core.SubChapterStyleType.XAndY
 
-["numbering-type",,, "Specify numbering type (English, Romanian, Arabic) numbers."]
-ChapterMD.Core.NumberingType NumberingType = ChapterMD.Core.NumberingType.English
+["numbering-style",,, "Specify numbering style (English, Romanian, Arabic) numbers."]
+ChapterMD.Core.NumberingStyle NumberingStyle = ChapterMD.Core.NumberingStyle.English

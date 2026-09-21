@@ -1,6 +1,6 @@
 ﻿namespace ChapterMD.Core;
 
-public enum NumberingType
+public enum NumberingStyle
 {
     English,
     Romanian,

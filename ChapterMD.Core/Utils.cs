@@ -16,14 +16,14 @@ public static class Utils
             throw new Exception($"Couldn't find numbering type for {num} to convert to an integer.");
     }
 
-    public static string ConvertDecimalToNumberType(int num, NumberingType type)
+    public static string ConvertDecimalToNumberType(int num, NumberingStyle type)
     {
 
         switch (type)
         {
-            case NumberingType.Romanian:
+            case NumberingStyle.Romanian:
                 return ToRoman(num);
-            case NumberingType.Arabic:
+            case NumberingStyle.Arabic:
                 return ToArabicIndic(num);
         }
 

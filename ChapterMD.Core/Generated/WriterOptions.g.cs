@@ -48,6 +48,6 @@ public partial class WriterOptions {
 
 	public ChapterMD.Core.SubChapterStyleType SubChapterStyleType {get; set;} = ChapterMD.Core.SubChapterStyleType.XAndY;
 
-	public ChapterMD.Core.NumberingType NumberingType {get; set;} = ChapterMD.Core.NumberingType.English;
+	public ChapterMD.Core.NumberingStyle NumberingStyle {get; set;} = ChapterMD.Core.NumberingStyle.English;
 
 }

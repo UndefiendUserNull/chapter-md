@@ -63,7 +63,7 @@ public static class ChapterFileWriter
 
             for (int i = 0; i < finalChaptersAmount; i++)
             {
-                string styledChapterNumber = Utils.ConvertDecimalToNumberType(i + finalStartFrom, options.NumberingType);
+                string styledChapterNumber = Utils.ConvertDecimalToNumberType(i + finalStartFrom, options.NumberingStyle);
 
                 writer.WriteLine($"- [{GetMarkedString(i, options.MarkedFrom, options.Marked)}] {options.Title} {styledChapterNumber}");
 
@@ -71,7 +71,7 @@ public static class ChapterFileWriter
                 {
                     for (int j = options.StartSubFrom; j < options.SubChaptersAmount; j++)
                     {
-                        string styledSubChapterNumber = Utils.ConvertDecimalToNumberType(j, options.NumberingType);
+                        string styledSubChapterNumber = Utils.ConvertDecimalToNumberType(j, options.NumberingStyle);
                         switch (options.SubChapterStyleType)
                         {
                             case SubChapterStyleType.XAndY:
