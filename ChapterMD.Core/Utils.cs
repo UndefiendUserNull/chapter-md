@@ -118,4 +118,5 @@ public static class Utils
         'M' => 1000,
         _ => throw new FormatException($"Invalid Roman numeral character: '{c}'.")
     };
+
 }

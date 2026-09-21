@@ -12,14 +12,13 @@ public static class ChapterFileWriter
 
         HandleConflicts(options);
 
+        var finalPath = Path.Combine(options.Output, options.FileName);
+        var dir = Path.GetDirectoryName(finalPath);
+        int finalStartFrom = options.StartFrom;
+        int finalChaptersAmount = options.ChaptersAmount;
 
         try
         {
-            var finalPath = Path.Combine(options.Output, options.FileName);
-            var dir = Path.GetDirectoryName(finalPath);
-            int finalStartFrom = options.StartFrom;
-            int finalChaptersAmount = options.ChaptersAmount;
-
             if (!string.IsNullOrEmpty(dir))
             {
                 Directory.CreateDirectory(dir);
@@ -27,71 +26,17 @@ public static class ChapterFileWriter
 
             if (Path.Exists(finalPath) && append && !options.FreshAppend)
             {
-                AppendExistingFile(finalPath, ref finalStartFrom, ref finalChaptersAmount, options.StartFrom);
+                UpdateWritingValuesForAppend(finalPath, ref finalStartFrom, ref finalChaptersAmount, options.StartFrom);
             }
 
             if (options.Unmark)
             {
-                string[] lines = [];
-
-                {
-                    using StreamReader sr = new(finalPath);
-
-                    lines = sr.ReadToEnd().Split("\n");
-
-                    for (int i = 0; i < lines.Length; i++)
-                    {
-                        if (lines[i].Contains($"[X]"))
-                        {
-                            lines[i] = lines[i].Replace("[X]", "[ ]");
-                        }
-                    }
-                }
-
-                using var wr = new StreamWriter(finalPath);
-
-
-                foreach (var line in lines)
-                {
-                    wr.Write(line);
-                }
-
+                Unmark(finalPath);
                 return;
             }
 
-            using var writer = new StreamWriter(finalPath, append: append || options.FreshAppend);
+            Write(finalPath, append, finalChaptersAmount, finalStartFrom, options);
 
-            for (int i = 0; i < finalChaptersAmount; i++)
-            {
-                string styledChapterNumber = Utils.ConvertDecimalToNumberType(i + finalStartFrom, options.NumberingStyle);
-
-                writer.WriteLine($"- [{GetMarkedString(i, options.MarkedFrom, options.Marked)}] {options.Title} {styledChapterNumber}");
-
-                if (options.SubChaptersAmount > 0)
-                {
-                    for (int j = options.StartSubFrom; j < options.SubChaptersAmount; j++)
-                    {
-                        string styledSubChapterNumber = Utils.ConvertDecimalToNumberType(j, options.NumberingStyle);
-                        switch (options.SubChapterStyleType)
-                        {
-                            case SubChapterStyleType.XAndY:
-                                writer.WriteLine($"\t- [{GetMarkedString(i, options.SubMarkedFrom, options.SubMarked)}] {options.SubTitle} {styledChapterNumber}.{styledSubChapterNumber}");
-                                break;
-                            case SubChapterStyleType.XOnly:
-                                writer.WriteLine($"\t- [{GetMarkedString(i, options.SubMarkedFrom, options.SubMarked)}] {options.SubTitle} {styledChapterNumber}");
-                                break;
-                            case SubChapterStyleType.YOnly:
-                                writer.WriteLine($"\t- [{GetMarkedString(i, options.SubMarkedFrom, options.SubMarked)}] {options.SubTitle} {styledSubChapterNumber}");
-                                break;
-                            case SubChapterStyleType.None:
-                                writer.WriteLine($"\t- [{GetMarkedString(i, options.SubMarkedFrom, options.SubMarked)}] {options.SubTitle}");
-                                break;
-                        }
-                    }
-                }
-            }
-
-            Console.WriteLine($"Generated {options.FileName} at {finalPath}.");
         }
         catch (Exception)
         {
@@ -99,7 +44,75 @@ public static class ChapterFileWriter
             throw;
         }
     }
-    public static void AppendExistingFile(string finalPath, ref int finalStartFrom, ref int finalChaptersAmount, int startFrom)
+
+    private static void Write(string finalPath, bool append, int finalChaptersAmount, int finalStartFrom, WriterOptions options)
+    {
+        using var writer = new StreamWriter(finalPath, append: append || options.FreshAppend);
+
+        for (int i = 0; i < finalChaptersAmount; i++)
+        {
+            string styledChapterNumber = Utils.ConvertDecimalToNumberType(i + finalStartFrom, options.NumberingStyle);
+
+            writer.WriteLine($"- [{GetMarkedString(i, options.MarkedFrom, options.Marked)}] {options.Title} {styledChapterNumber}");
+
+            if (options.SubChaptersAmount > 0)
+            {
+                for (int j = options.StartSubFrom; j < options.SubChaptersAmount; j++)
+                {
+                    string styledSubChapterNumber = Utils.ConvertDecimalToNumberType(j, options.NumberingStyle);
+                    switch (options.SubChapterStyleType)
+                    {
+                        case SubChapterStyleType.XAndY:
+                            writer.WriteLine($"\t- [{GetMarkedString(i, options.SubMarkedFrom, options.SubMarked)}] {options.SubTitle} {styledChapterNumber}.{styledSubChapterNumber}");
+                            break;
+                        case SubChapterStyleType.XOnly:
+                            writer.WriteLine($"\t- [{GetMarkedString(i, options.SubMarkedFrom, options.SubMarked)}] {options.SubTitle} {styledChapterNumber}");
+                            break;
+                        case SubChapterStyleType.YOnly:
+                            writer.WriteLine($"\t- [{GetMarkedString(i, options.SubMarkedFrom, options.SubMarked)}] {options.SubTitle} {styledSubChapterNumber}");
+                            break;
+                        case SubChapterStyleType.None:
+                            writer.WriteLine($"\t- [{GetMarkedString(i, options.SubMarkedFrom, options.SubMarked)}] {options.SubTitle}");
+                            break;
+                    }
+                }
+            }
+        }
+
+        Console.WriteLine($"Generated {options.FileName} at {finalPath}.");
+
+    }
+
+    private static void Unmark(string finalPath)
+    {
+        string[] lines = [];
+
+        {
+            using StreamReader sr = new(finalPath);
+
+            lines = sr.ReadToEnd().Split("\n");
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                if (lines[i].Contains($"[X]"))
+                {
+                    lines[i] = lines[i].Replace("[X]", "[ ]");
+                }
+            }
+        }
+
+        using var wr = new StreamWriter(finalPath);
+
+
+        foreach (var line in lines)
+        {
+            wr.Write(line);
+        }
+
+        return;
+    }
+
+    public static void UpdateWritingValuesForAppend(string finalPath, ref int finalStartFrom, ref int finalChaptersAmount, int startFrom)
     {
         Console.WriteVerboseLine($"File at {finalPath} already exists and option append is used.");
         string[] data = File.ReadAllLines(finalPath);
