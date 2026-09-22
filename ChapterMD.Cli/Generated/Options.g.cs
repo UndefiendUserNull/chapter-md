@@ -8,68 +8,109 @@
 
 namespace ChapterMD.Cli;
 
-using CommandLine;
+using Spectre.Console.Cli;
+using System.ComponentModel;
 
 public partial class Options {
 
-	[Option("name", Default = "Chapters.md", HelpText = "File name")]
+	[CommandOption("--file-name")]
+	[Description("File name")]
+	[DefaultValue("Chapters.md")]
 	public string FileName {get; set;} = "Chapters.md";
 
-	[Option("verbose", Default = false, HelpText = "Prints all messages to standard output.")]
+	[CommandOption("--verbose")]
+	[Description("Prints all messages to standard output.")]
+	[DefaultValue(false)]
 	public bool Verbose {get; set;} = false;
 
-	[Option("sub-amount", Default = 5, HelpText = "The amount of sub-chapters inside each chapter.")]
+	[CommandOption("--sub-amount")]
+	[Description("The amount of sub-chapters inside each chapter.")]
+	[DefaultValue(5)]
 	public int SubChaptersAmount {get; set;} = 5;
 
-	[Option("amount", Default = 5, HelpText = "The amount of chapters inside the file..")]
+	[CommandOption("--amount")]
+	[Description("The amount of chapters inside the file..")]
+	[DefaultValue(5)]
 	public int ChaptersAmount {get; set;} = 5;
 
-	[Option("title", Default = "Chapter", HelpText = "Custom title name instead of Chapter X")]
+	[CommandOption("--title")]
+	[Description("Custom title name instead of Chapter X")]
+	[DefaultValue("Chapter")]
 	public string Title {get; set;} = "Chapter";
 
-	[Option("sub-title", Default = "Part", HelpText = "Custom sub-title name instead of Part X")]
+	[CommandOption("--sub-title")]
+	[Description("Custom sub-title name instead of Part X")]
+	[DefaultValue("Part")]
 	public string SubTitle {get; set;} = "Part";
 
-	[Option("start-from", Default = 1, HelpText = "")]
+	[CommandOption("--start-from")]
+	[Description("")]
+	[DefaultValue(1)]
 	public int StartFrom {get; set;} = 1;
 
-	[Option("start-sub-from", Default = 1, HelpText = "")]
+	[CommandOption("--start-sub-from")]
+	[Description("")]
+	[DefaultValue(1)]
 	public int StartSubFrom {get; set;} = 1;
 
-	[Option("append", Default = true, HelpText = "Adds new lines to existing chapters file continuing from the last chapter.")]
+	[CommandOption("--append")]
+	[Description("Adds new lines to existing chapters file continuing from the last chapter.")]
+	[DefaultValue(true)]
 	public bool Append {get; set;} = true;
 
-	[Option("fresh-append", Default = false, HelpText = "Adds new lines to existing chapters file starting from (StartFrom).")]
+	[CommandOption("--fresh-append")]
+	[Description("Adds new lines to existing chapters file starting from (StartFrom).")]
+	[DefaultValue(false)]
 	public bool FreshAppend {get; set;} = false;
 
-	[Option("output", Default = ".", HelpText = "Where the file will be saved.")]
+	[CommandOption("--output")]
+	[Description("Where the file will be saved.")]
+	[DefaultValue(".")]
 	public string Output {get; set;} = ".";
 
-	[Option("overwrite", Default = false, HelpText = "Overwrites the existing chapters file.")]
+	[CommandOption("--overwrite")]
+	[Description("Overwrites the existing chapters file.")]
+	[DefaultValue(false)]
 	public bool Overwrite {get; set;} = false;
 
-	[Option("skip-confirm", Default = false, HelpText = "Skips all \"Press To Continue\" prompts.")]
+	[CommandOption("--skip-confirm")]
+	[Description("Skips all \"Press To Continue\" prompts.")]
+	[DefaultValue(false)]
 	public bool SkipConfirm {get; set;} = false;
 
-	[Option("marked", Default = false, HelpText = "Generates chapters as marked.")]
+	[CommandOption("--marked")]
+	[Description("Generates chapters as marked.")]
+	[DefaultValue(false)]
 	public bool Marked {get; set;} = false;
 
-	[Option("marked-from", Default = 0, HelpText = "Start marking chapters from.")]
+	[CommandOption("--marked-from")]
+	[Description("Start marking chapters from.")]
+	[DefaultValue(0)]
 	public int MarkedFrom {get; set;} = 0;
 
-	[Option("sub-marked", Default = false, HelpText = "Generates sub-chapters as marked.")]
+	[CommandOption("--sub-marked")]
+	[Description("Generates sub-chapters as marked.")]
+	[DefaultValue(false)]
 	public bool SubMarked {get; set;} = false;
 
-	[Option("sub-marked-from", Default = 0, HelpText = "Start marking sub-chapters from.")]
+	[CommandOption("--sub-marked-from")]
+	[Description("Start marking sub-chapters from.")]
+	[DefaultValue(0)]
 	public int SubMarkedFrom {get; set;} = 0;
 
-	[Option("unmark", Default = false, HelpText = "Un-marks the existing chapters file.")]
+	[CommandOption("--unmark")]
+	[Description("Un-marks the existing chapters file.")]
+	[DefaultValue(false)]
 	public bool Unmark {get; set;} = false;
 
-	[Option("sub-chapter-style", Default = ChapterMD.Core.SubChapterStyleType.XAndY, HelpText = "Specify the style of sub-chapters (XAndY, XOnly, YOnly, None).")]
+	[CommandOption("--sub-chapter-style")]
+	[Description("Specify the style of sub-chapters (XAndY, XOnly, YOnly, None).")]
+	[DefaultValue(ChapterMD.Core.SubChapterStyleType.XAndY)]
 	public ChapterMD.Core.SubChapterStyleType SubChapterStyleType {get; set;} = ChapterMD.Core.SubChapterStyleType.XAndY;
 
-	[Option("numbering-style", Default = ChapterMD.Core.NumberingStyle.English, HelpText = "Specify numbering style (English, Romanian, Arabic) numbers.")]
+	[CommandOption("--numbering-style")]
+	[Description("Specify numbering style (English, Romanian, Arabic) numbers.")]
+	[DefaultValue(ChapterMD.Core.NumberingStyle.English)]
 	public ChapterMD.Core.NumberingStyle NumberingStyle {get; set;} = ChapterMD.Core.NumberingStyle.English;
 
 }

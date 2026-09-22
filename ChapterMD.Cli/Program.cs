@@ -1,5 +1,7 @@
 ﻿using ChapterMD.Core;
 using CommandLine;
+using Spectre.Console;
+using Spectre.Console.Cli;
 
 namespace ChapterMD.Cli;
 
@@ -9,16 +11,28 @@ public static class Program
 
     static int Main(string[] args)
     {
-        if (args.Length == 0)
+        var app = new CommandApp<RunCommand>();
+        app.Configure(c => c.SetApplicationName("chaptermd"));
+
+        try
         {
-            Console.WriteLine("No args provided, generating default template.");
+            return app.Run(args);
         }
-        return Parser.Default.ParseArguments<Options>(args)
-        .MapResult(
-        opts => { RunOptions(opts); return 0; },
-        errs => { ReportParseResult(errs); return 1; });
+        catch (CommandRuntimeException ex)
+        {
+            AnsiConsole.MarkupLineInterpolated($"[red]Error:[/] {ex.Message}");
+            return 1;
+        }
+
     }
-    static void RunOptions(Options opts)
+    private sealed class RunCommand : Command<Options>
+    {
+        protected override int Execute(CommandContext context, Options settings, CancellationToken cancellationToken)
+        {
+            return RunOptions(settings);
+        }
+    }
+    private static int RunOptions(Options opts)
     {
         Console.Verbose = opts.Verbose;
         Console.SkipPressToContinue = opts.SkipConfirm;
@@ -30,6 +44,8 @@ public static class Program
         }
 
         Console.PressToContinue();
+
+        return 0;
     }
     static int ReportParseResult(IEnumerable<Error> errs)
     {
