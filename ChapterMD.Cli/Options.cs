@@ -1,6 +1,8 @@
-﻿namespace ChapterMD.Cli;
+﻿using Spectre.Console.Cli;
 
-public partial class Options
+namespace ChapterMD.Cli;
+
+public partial class Options : CommandSettings
 {
 
 }
