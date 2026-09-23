@@ -1,59 +1,99 @@
-["name",,, "File name"]
+[CommandOption("--file-name")]
+[Description("File name")]
+[DefaultValue("Chapters.md")]
 string FileName = "Chapters.md"
 
-["verbose",,, "Prints all messages to standard output."]
+[CommandOption("--verbose")]
+[Description("Prints all messages to standard output.")]
+[DefaultValue(false)]
 bool Verbose = false
 
-["sub-amount",,, "The amount of sub-chapters inside each chapter."]
+[CommandOption("--sub-amount")]
+[Description("The amount of sub-chapters inside each chapter.")]
+[DefaultValue(5)]
 int SubChaptersAmount = 5
 
-["amount",,, "The amount of chapters inside the file..",,, ]
+[CommandOption("--amount")]
+[Description("The amount of chapters inside the file..")]
+[DefaultValue(5)]
 int ChaptersAmount = 5
 
-["title",,, "Custom title name instead of Chapter X",,, ]
+[CommandOption("--title")]
+[Description("Custom title name instead of Chapter X")]
+[DefaultValue("Chapter")]
 string Title = "Chapter"
 
-["sub-title",,, "Custom sub-title name instead of Part X",,, ]
+[CommandOption("--sub-title")]
+[Description("Custom sub-title name instead of Part X")]
+[DefaultValue("Part")]
 string SubTitle = "Part"
 
-["start-from",,, "",,, ]
+[CommandOption("--start-from")]
+[Description("")]
+[DefaultValue(1)]
 int StartFrom = 1
 
-["start-sub-from",,, "",,, ]
+[CommandOption("--start-sub-from")]
+[Description("")]
+[DefaultValue(1)]
 int StartSubFrom = 1
 
-["append",,, "Adds new lines to existing chapters file continuing from the last chapter.",,, ]
+[CommandOption("--append")]
+[Description("Adds new lines to existing chapters file continuing from the last chapter.")]
+[DefaultValue(true)]
 bool Append = true
 
-["fresh-append",,, "Adds new lines to existing chapters file starting from (StartFrom).",,, ]
+[CommandOption("--fresh-append")]
+[Description("Adds new lines to existing chapters file starting from (StartFrom).")]
+[DefaultValue(false)]
 bool FreshAppend = false
 
-["output",,, "Where the file will be saved.",,, ]
+[CommandOption("--output")]
+[Description("Where the file will be saved.")]
+[DefaultValue(".")]
 string Output = "."
 
-["overwrite",,, "Overwrites the existing chapters file.",,, ]
+[CommandOption("--overwrite")]
+[Description("Overwrites the existing chapters file.")]
+[DefaultValue(false)]
 bool Overwrite = false
 
-["skip-confirm",,, "Skips all \"Press To Continue\" prompts.",,, ]
+[CommandOption("--skip-confirm")]
+[Description("Skips all \"Press To Continue\" prompts.")]
+[DefaultValue(false)]
 bool SkipConfirm = false
 
-["marked",,, "Generates chapters as marked."]
+[CommandOption("--marked")]
+[Description("Generates chapters as marked.")]
+[DefaultValue(false)]
 bool Marked = false
 
-["marked-from",,, "Start marking chapters from."]
+[CommandOption("--marked-from")]
+[Description("Start marking chapters from.")]
+[DefaultValue(0)]
 int MarkedFrom = 0
 
-["sub-marked",,, "Generates sub-chapters as marked."]
+[CommandOption("--sub-marked")]
+[Description("Generates sub-chapters as marked.")]
+[DefaultValue(false)]
 bool SubMarked = false
 
-["sub-marked-from",,, "Start marking sub-chapters from."]
+[CommandOption("--sub-marked-from")]
+[Description("Start marking sub-chapters from.")]
+[DefaultValue(0)]
 int SubMarkedFrom = 0
 
-["unmark",,, "Un-marks the existing chapters file."]
+[CommandOption("--unmark")]
+[Description("Un-marks the existing chapters file.")]
+[DefaultValue(false)]
 bool Unmark = false
 
-["sub-chapter-style",,, "Specify the style of sub-chapters (XAndY, XOnly, YOnly, None)."]
+[CommandOption("--sub-chapter-style")]
+[Description("Specify the style of sub-chapters (XAndY, XOnly, YOnly, None).")]
+[DefaultValue(ChapterMD.Core.SubChapterStyleType.XAndY)]
 ChapterMD.Core.SubChapterStyleType SubChapterStyleType = ChapterMD.Core.SubChapterStyleType.XAndY
 
-["numbering-style",,, "Specify numbering style (English, Romanian, Arabic) numbers."]
+[CommandOption("--numbering-style")]
+[Description("Specify numbering style (English, Romanian, Arabic) numbers.")]
+[DefaultValue(ChapterMD.Core.NumberingStyle.English)]
 ChapterMD.Core.NumberingStyle NumberingStyle = ChapterMD.Core.NumberingStyle.English
