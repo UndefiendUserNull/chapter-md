@@ -1,4 +1,4 @@
-﻿using Spectre.Console;
+using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace ChapterMD.Cli;
