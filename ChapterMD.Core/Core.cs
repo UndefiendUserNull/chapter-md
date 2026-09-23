@@ -1,14 +1,15 @@
 ﻿namespace ChapterMD.Core;
 
+
+
 public static class ChapterFileWriter
 {
-    private static readonly UConsole Console = new();
-    public static void WriteChapterFile(WriterOptions options)
+    public static void WriteChapterFile(WriterOptions options, TextWriter writer)
     {
-        Console.Verbose = options.Verbose;
-        Console.SkipPressToContinue = options.SkipConfirm;
-
         bool append = !options.Overwrite;
+        var oldOut = Console.Out;
+
+        Console.SetOut(writer);
 
         HandleConflicts(options);
 
@@ -19,29 +20,36 @@ public static class ChapterFileWriter
 
         try
         {
-            if (!string.IsNullOrEmpty(dir))
+            try
             {
-                Directory.CreateDirectory(dir);
-            }
+                if (!string.IsNullOrEmpty(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
 
-            if (Path.Exists(finalPath) && append && !options.FreshAppend)
+                if (Path.Exists(finalPath) && append && !options.FreshAppend)
+                {
+                    UpdateWritingValuesForAppend(finalPath, ref finalStartFrom, ref finalChaptersAmount, options.StartFrom);
+                }
+
+                if (options.Unmark)
+                {
+                    Unmark(finalPath);
+                    return;
+                }
+
+                Write(finalPath, append, finalChaptersAmount, finalStartFrom, options);
+
+            }
+            catch (Exception)
             {
-                UpdateWritingValuesForAppend(finalPath, ref finalStartFrom, ref finalChaptersAmount, options.StartFrom);
+                // TODO: Handle common IO errors
+                throw;
             }
-
-            if (options.Unmark)
-            {
-                Unmark(finalPath);
-                return;
-            }
-
-            Write(finalPath, append, finalChaptersAmount, finalStartFrom, options);
-
         }
-        catch (Exception)
+        finally
         {
-            // TODO: Handle common IO errors
-            throw;
+            Console.SetOut(oldOut);
         }
     }
 
@@ -82,7 +90,7 @@ public static class ChapterFileWriter
             }
         }
 
-        Console.WriteLine($"Generated {options.FileName} at {finalPath}.");
+        Console.WriteLine(ConsoleWritingUtils.Style($"Generated {options.FileName} at {finalPath}.", ConsoleWritingUtils.MessageType.INFO));
 
     }
 
@@ -117,12 +125,12 @@ public static class ChapterFileWriter
 
     public static void UpdateWritingValuesForAppend(string finalPath, ref int finalStartFrom, ref int finalChaptersAmount, int startFrom)
     {
-        Console.WriteVerboseLine($"File at {finalPath} already exists and option append is used.");
+        Console.WriteLine(ConsoleWritingUtils.Style($"File at {finalPath} already exists and option append is used.", ConsoleWritingUtils.MessageType.WARNING));
         string[] data = File.ReadAllLines(finalPath);
 
         if (data.Length == 0)
         {
-            Console.WriteVerboseLine("File found was empty.");
+            Console.WriteLine(ConsoleWritingUtils.Style("File found was empty.", ConsoleWritingUtils.MessageType.ERROR));
             return;
         }
 
@@ -134,15 +142,14 @@ public static class ChapterFileWriter
             int parsed = Utils.RevertNumberTypeToDecimal(lastChapter[lastChapter.Length - 1]);
 
             finalStartFrom = parsed + 1;
-            Console.WriteVerboseLine($"Last chapter found = {finalStartFrom}");
+            Console.WriteLine(ConsoleWritingUtils.Style($"Last chapter found = {finalStartFrom}", ConsoleWritingUtils.MessageType.INFO));
         }
         catch
         {
-            Console.WriteLine($"Couldn't find the last chapter in {finalPath}, using fresh append instead.");
+            Console.WriteLine(ConsoleWritingUtils.Style($"Couldn't find the last chapter in {finalPath}, using fresh append instead.", ConsoleWritingUtils.MessageType.ERROR));
             finalStartFrom = startFrom;
-            Console.WriteVerboseLine($"Start from didn't change ({startFrom})");
         }
-        Console.WriteVerboseLine($"Start from = {finalStartFrom}");
+        Console.WriteLine(ConsoleWritingUtils.Style($"Start from = {finalStartFrom}", ConsoleWritingUtils.MessageType.INFO));
     }
 
     private static void HandleConflicts(WriterOptions options)

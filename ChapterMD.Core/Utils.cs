@@ -39,23 +39,30 @@ public static class Utils
         );
     }
 
-    // Copied from (https://www.reddit.com/user/Bio2hazard/)
-    public static string ToRoman(int num) => num switch
+    public static string ToRoman(int num)
     {
-        >= 1000 => "M" + ToRoman(num - 1000),
-        >= 900 => "CM" + ToRoman(num - 900),
-        >= 500 => "D" + ToRoman(num - 500),
-        >= 400 => "CD" + ToRoman(num - 400),
-        >= 100 => "C" + ToRoman(num - 100),
-        >= 90 => "XC" + ToRoman(num - 90),
-        >= 50 => "L" + ToRoman(num - 50),
-        >= 40 => "XL" + ToRoman(num - 40),
-        >= 10 => "X" + ToRoman(num - 10),
-        >= 9 => "IX" + ToRoman(num - 9),
-        >= 5 => "V" + ToRoman(num - 5),
-        >= 4 => "IV" + ToRoman(num - 4),
-        >= 1 => "I" + ToRoman(num - 1),
-        _ => string.Empty
+        if (num == 0) return "0";
+        else
+            return ConvertToRoman(num);
+    }
+
+    // Copied from (https://www.reddit.com/user/Bio2hazard/)
+    private static string ConvertToRoman(int num) => num switch
+    {
+        >= 1000 => "M" + ConvertToRoman(num - 1000),
+        >= 900 => "CM" + ConvertToRoman(num - 900),
+        >= 500 => "D" + ConvertToRoman(num - 500),
+        >= 400 => "CD" + ConvertToRoman(num - 400),
+        >= 100 => "C" + ConvertToRoman(num - 100),
+        >= 90 => "XC" + ConvertToRoman(num - 90),
+        >= 50 => "L" + ConvertToRoman(num - 50),
+        >= 40 => "XL" + ConvertToRoman(num - 40),
+        >= 10 => "X" + ConvertToRoman(num - 10),
+        >= 9 => "IX" + ConvertToRoman(num - 9),
+        >= 5 => "V" + ConvertToRoman(num - 5),
+        >= 4 => "IV" + ConvertToRoman(num - 4),
+        >= 1 => "I" + ConvertToRoman(num - 1),
+        _ => string.Empty,
     };
 
     public static int FromArabicIndic(string text)

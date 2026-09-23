@@ -5,7 +5,7 @@
     },
     "CLI Default": {
       "commandName": "Project",
-      "commandLineArgs": "--name \"IS Chapters.md\" --verbose --amount 7 --sub-amount 2 --title \"IS: Chapter\" --sub-title \"IS: Part\" --unmark"
+      "commandLineArgs": "--file-name \"English sem1.md\" --amount 12 --sub-amount 7 --sub-title \"Unit\" --start-from 0 --output \"Study\" --numbering-style Romanian --overwrite"
     }
   }
 }
