@@ -60,21 +60,24 @@ public static class ChapterFileWriter
                 for (int j = options.StartSubFrom; j < options.SubChaptersAmount; j++)
                 {
                     string styledSubChapterNumber = Utils.ConvertDecimalToNumberType(j, options.NumberingStyle);
+                    string subChapterEnding = string.Empty;
+
                     switch (options.SubChapterStyleType)
                     {
                         case SubChapterStyleType.XAndY:
-                            writer.WriteLine($"\t- [{GetMarkedString(i, options.SubMarkedFrom, options.SubMarked)}] {options.SubTitle} {styledChapterNumber}.{styledSubChapterNumber}");
+                            subChapterEnding = $"{styledChapterNumber}.{styledSubChapterNumber}";
                             break;
                         case SubChapterStyleType.XOnly:
-                            writer.WriteLine($"\t- [{GetMarkedString(i, options.SubMarkedFrom, options.SubMarked)}] {options.SubTitle} {styledChapterNumber}");
+                            subChapterEnding = $"{styledChapterNumber}";
                             break;
                         case SubChapterStyleType.YOnly:
-                            writer.WriteLine($"\t- [{GetMarkedString(i, options.SubMarkedFrom, options.SubMarked)}] {options.SubTitle} {styledSubChapterNumber}");
+                            subChapterEnding = $"{styledSubChapterNumber}";
                             break;
                         case SubChapterStyleType.None:
-                            writer.WriteLine($"\t- [{GetMarkedString(i, options.SubMarkedFrom, options.SubMarked)}] {options.SubTitle}");
+                            subChapterEnding = string.Empty;
                             break;
                     }
+                    writer.WriteLine($"\t- [{GetMarkedString(i, options.SubMarkedFrom, options.SubMarked)}] {options.SubTitle} {subChapterEnding}");
                 }
             }
         }
