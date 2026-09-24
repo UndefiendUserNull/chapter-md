@@ -65,9 +65,9 @@ public static class ChapterFileWriter
 
             if (options.SubChaptersAmount > 0)
             {
-                for (int j = options.StartSubFrom; j < options.SubChaptersAmount; j++)
+                for (int j = 0; j < options.SubChaptersAmount; j++)
                 {
-                    string styledSubChapterNumber = Utils.ConvertDecimalToNumberType(j, options.NumberingStyle);
+                    string styledSubChapterNumber = Utils.ConvertDecimalToNumberType(j + options.StartSubFrom, options.NumberingStyle);
                     string subChapterEnding = string.Empty;
 
                     switch (options.SubChapterStyleType)
@@ -97,6 +97,7 @@ public static class ChapterFileWriter
     private static void Unmark(string finalPath)
     {
         string[] lines = [];
+        string[] splitLines = lines.Split("/");
 
         {
             using StreamReader sr = new(finalPath);
@@ -173,7 +174,7 @@ public static class ChapterFileWriter
 
     private static string? GetMarkedString(int i, int markedFrom, bool useMarked)
     {
-        if (!useMarked) return null;
+        if (!useMarked) return " ";
 
         return i >= markedFrom ? "X" : " ";
     }
