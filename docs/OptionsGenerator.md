@@ -1,48 +1,45 @@
-# Options Generator Explained
+# options.txt Syntax
 
-## `options.txt` Format
+Options are defined in `./tools/options.txt`.  
+Each option is a block of [Spectre.Console](https://github.com/spectreconsole/spectre.console) attributes followed by the variable declaration.
 
-Each entry is two lines, separated by a blank line:
+## Basic format
 
-    [<flag>, <help text>]
-    <type> <Identifier> = <default>
+```txt
+[CommandOption("--option-name")]
+[Description("Description text.")]
+[DefaultValue(default)]
+Type PropertyName = default
+```
 
-#### Example:
+- `[CommandOption("--option-name")]` — CLI flag.
+- `[Description("...")]` — help text.
+- `[DefaultValue(...)]` — default value shown by the CLI.
+- `Type PropertyName = default` — property type, name, and initial value.
+  - **No semicolon needed.**
 
-```cs
-["name", "File name"]
+## Example from code
+
+```txt
+[CommandOption("--file-name")]
+[Description("File name")]
+[DefaultValue("Chapters.md")]
 string FileName = "Chapters.md"
 ```
 
-## Generated output
+## Notes
 
-Options.g.cs | attributes for the CLI side:
+- Comments starts with a `#`.
+- Attributes are copied to the generated `ChapterMD.Cli/Options.g.cs`.
+- For enums, use the full type and value:
 
-```cs
-[Option("name", Default = "Chapters.md", HelpText = "File name")]
-public string FileName { get; set; } = "Chapters.md";
+```txt
+[CommandOption("--numbering-style")]
+[Description("Numbering style.")]
+[DefaultValue(ChapterMD.Core.NumberingStyle.English)]
+ChapterMD.Core.NumberingStyle NumberingStyle = ChapterMD.Core.NumberingStyle.English
 ```
 
-WriterOptions.g.cs | plain properties for the core side:
-
-```cs
-public string FileName { get; set; } = "Chapters.md";
-```
-
-## How to use:
-
-1.  Add your options in "options.txt", or create one, for example i will put these two.
-
-    `options.txt` :
-
-```cs
-["name", "File name"]
-string FileName = "Chapters.md"
-
-["verbose", "Prints all messages to standard output."]
-bool Verbose = false
-```
-
-2. Run `py ./GenerateOptions.py`, Files will be generated in each project "Generated" folder.
-
-**Beware that the generated files gets overwritten every time the generation runs, so don't change anything inside the generated files.**
+After adding an option, run the generator.  
+It re-writes `ChapterMD.Cli/Generated/Options.g.cs`, `ChapterMD.Core/Generated/WriterOptions.g.cs`, and `ChapterMD.Cli/Generated/Utils.g.cs` with the new options.  
+Do not edit the generated files manually.
