@@ -25,6 +25,12 @@ public static class ChapterFileWriter
         {
             try
             {
+                if (options.templateFile != string.Empty)
+                {
+                    WriteChapterFileFromTemplate(options, finalPath);
+                    return;
+                }
+
                 if (!string.IsNullOrEmpty(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -107,11 +113,11 @@ public static class ChapterFileWriter
         return theThing;
     }
 
-    public static void WriteChapterFileFromTemplate(WriterOptions options)
+    public static void WriteChapterFileFromTemplate(WriterOptions options, string fullPath)
     {
         var theThing = ParseTemplate(options.templateFile);
 
-        using var writer = new StreamWriter("t.md");
+        using var writer = new StreamWriter(fullPath);
 
         foreach (var chapter in theThing)
         {

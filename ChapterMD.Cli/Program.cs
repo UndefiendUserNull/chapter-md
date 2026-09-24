@@ -37,10 +37,7 @@ public static class Program
 
         if (opts.FileName != string.Empty && opts.ChaptersAmount > 0)
         {
-            if (opts.templateFile == string.Empty)
-                Core.ChapterFileWriter.WriteChapterFile(Utils.ToWriterOptions(opts), bridge);
-            else
-                Core.ChapterFileWriter.WriteChapterFileFromTemplate(Utils.ToWriterOptions(opts));
+            Core.ChapterFileWriter.WriteChapterFile(Utils.ToWriterOptions(opts), bridge);
         }
 
         return 0;
