@@ -80,7 +80,7 @@ public static class ChapterFileWriter
             }
 
             // Individual
-            if (int.TryParse(block[0].ToString(), out var chapterIndex))
+            if (int.TryParse(block.Split(' ')[0], out var chapterIndex))
             {
                 if (chapterIndex < 0)
                     throw new Exception($"Start from cannot be negative '{block}'");
@@ -90,7 +90,8 @@ public static class ChapterFileWriter
 
             // Individual Groups
             {
-                var safeToParseBlock = block[..block.IndexOf(':')].Trim().Replace(" ", string.Empty);
+                var indexOfColon = block.IndexOf(':') < 0 ? throw new Exception($"No colon was found '{block}'") : block.IndexOf(':');
+                var safeToParseBlock = block[..indexOfColon].Trim().Replace(" ", string.Empty);
                 if (Regex.IsMatch(safeToParseBlock, @"^\d,"))
                 {
                     try
@@ -159,22 +160,30 @@ public static class ChapterFileWriter
 
     private static ChapterProperties ParseLine(string line)
     {
-        string[] props = (line[(line.IndexOf(':') + 2)..]).Split(' ');
-        ChapterProperties result = new(0, 0, false);
+        bool partsFound = false, startFromFound = false, markedFound = false;
+
+        var indexOfColon = line.Replace(" ", string.Empty).IndexOf(':') < 0 ? throw new Exception($"No colon was found '{line}'") : line.Replace(" ", string.Empty).IndexOf(':');
+        string[] props = line[(indexOfColon + 1)..].Split(' ');
+
+        ChapterProperties result = new(1, 1, false);
 
         for (int i = 0; i < props.Length; i++)
         {
             if (props[i] == "marked")
             {
                 result.IsMarked = true;
+                markedFound = true;
             }
+
             else if (props[i] == "from")
             {
                 if (int.TryParse(props[i + 1], out var parsedStartFrom))
                 {
                     if (parsedStartFrom < 0)
                         throw new Exception($"Start from cannot be negative '{line}'"); // TODO: Highlight syntax error (line.replace(error))
+
                     result.StartFrom = parsedStartFrom;
+                    startFromFound = true;
                 }
                 else
                 {
@@ -189,12 +198,24 @@ public static class ChapterFileWriter
                         throw new Exception($"Parts count cannot be negative '{line}'"); // TODO: Highlight syntax error (line.replace(error))
 
                     result.Parts = partsCount;
+                    partsFound = true;
                 }
                 else
                 {
                     throw new Exception($"Invalid string before 'parts' {line}");
                 }
             }
+            else
+            {
+                if (!markedFound)
+                    result.IsMarked = false;
+                if (!partsFound)
+                    result.Parts = 1;
+                if (!startFromFound)
+                    result.StartFrom = 1;
+            }
+
+
         }
 
         return result;
