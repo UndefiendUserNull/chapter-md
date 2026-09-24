@@ -74,6 +74,17 @@ public static class ChapterFileWriter
                     theThing[i] = ParseLine(block);
                 }
             }
+
+            // Individual
+            if (int.TryParse(block[0].ToString(), out var chapterIndex))
+            {
+                if (chapterIndex < 0)
+                    throw new Exception($"Start from cannot be negative '{block}'");
+
+                theThing[chapterIndex] = ParseLine(block);
+            }
+
+
         }
 
         foreach (var item in theThing.Values)
