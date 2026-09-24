@@ -1,4 +1,6 @@
-﻿namespace ChapterMD.Core;
+﻿using System.Text.RegularExpressions;
+
+namespace ChapterMD.Core;
 
 
 
@@ -84,10 +86,29 @@ public static class ChapterFileWriter
                 theThing[chapterIndex] = ParseLine(block);
             }
 
+            // Individual Groups
+            {
+                var safeToParseBlock = block[..block.IndexOf(':')].Trim().Replace(" ", string.Empty);
+                if (Regex.IsMatch(safeToParseBlock, @"^\d,"))
+                {
+                    try
+                    {
+                        var group = safeToParseBlock.Split(',').Select(x => int.Parse(x));
+                        foreach (var i in group)
+                        {
+                            theThing[i] = ParseLine(block);
+                        }
+                    }
+                    catch (InvalidCastException)
+                    {
+                        throw new InvalidCastException($"Error while casting block '{safeToParseBlock}' containing NaN.");
+                    }
+                }
+            }
 
         }
 
-        foreach (var item in theThing.Values)
+        foreach (var item in theThing)
         {
 
             Console.WriteLine(item);
