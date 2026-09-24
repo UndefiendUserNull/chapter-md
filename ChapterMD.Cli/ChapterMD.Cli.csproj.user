@@ -4,7 +4,7 @@
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup>
-    <ActiveDebugProfile>CLI Default</ActiveDebugProfile>
+    <ActiveDebugProfile>Profile 1</ActiveDebugProfile>
     <_LastSelectedProfileId>D:\Projects\ChapterMD\ChapterMD.Cli\Properties\PublishProfiles\FolderProfile.pubxml</_LastSelectedProfileId>
   </PropertyGroup>
 </Project>

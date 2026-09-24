@@ -50,4 +50,6 @@ public partial class WriterOptions {
 
 	public ChapterMD.Core.NumberingStyle NumberingStyle {get; set;} = ChapterMD.Core.NumberingStyle.English;
 
+	public string templateFile {get; set;} = string.Empty;
+
 }

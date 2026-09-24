@@ -97,3 +97,8 @@ ChapterMD.Core.SubChapterStyleType SubChapterStyleType = ChapterMD.Core.SubChapt
 [Description("Specify numbering style (English, Romanian, Arabic) numbers.")]
 [DefaultValue(ChapterMD.Core.NumberingStyle.English)]
 ChapterMD.Core.NumberingStyle NumberingStyle = ChapterMD.Core.NumberingStyle.English
+
+[CommandOption("--template")]
+[Description("The template file.")]
+[DefaultValue("")]
+string templateFile = string.Empty

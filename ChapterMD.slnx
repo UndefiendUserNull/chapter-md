@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/tools/">
+    <File Path="tools/options.txt" />
+  </Folder>
   <Project Path="ChapterMD.Cli/ChapterMD.Cli.csproj" />
   <Project Path="ChapterMD.Core/ChapterMD.Core.csproj" />
 </Solution>

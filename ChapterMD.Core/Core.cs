@@ -11,6 +11,11 @@ public static class ChapterFileWriter
 
         Console.SetOut(writer);
 
+        if (options.templateFile != string.Empty)
+        {
+            ParseTemplate(options.templateFile);
+        }
+
         HandleConflicts(options);
 
         var finalPath = Path.Combine(options.Output, options.FileName);
@@ -51,6 +56,74 @@ public static class ChapterFileWriter
         {
             Console.SetOut(oldOut);
         }
+    }
+
+    private static void ParseTemplate(string templateFile)
+    {
+        string[] data = File.ReadAllLines(templateFile);
+        Dictionary<int, ChapterProperties> theThing = [];
+
+        foreach (var block in data)
+        {
+            // Range rules
+            if (block.StartsWith('['))
+            {
+                var rangeFound = Utils.ParseRange(block);
+                for (int i = rangeFound.Min; i <= rangeFound.Max; i++)
+                {
+                    theThing[i] = ParseLine(block);
+                }
+            }
+        }
+
+        foreach (var item in theThing.Values)
+        {
+
+            Console.WriteLine(item);
+        }
+    }
+
+    private static ChapterProperties ParseLine(string line)
+    {
+        string[] props = (line[(line.IndexOf(':') + 2)..]).Split(' ');
+        ChapterProperties result = new(0, 0, false);
+
+        for (int i = 0; i < props.Length; i++)
+        {
+            if (props[i] == "marked")
+            {
+                result.IsMarked = true;
+            }
+            else if (props[i] == "from")
+            {
+                if (int.TryParse(props[i + 1], out var parsedStartFrom))
+                {
+                    if (parsedStartFrom < 0)
+                        throw new Exception($"Start from cannot be negative '{line}'"); // TODO: Highlight syntax error (line.replace(error))
+                    result.StartFrom = parsedStartFrom;
+                }
+                else
+                {
+                    throw new Exception($"Invalid string after 'from' {line}");
+                }
+            }
+            else if (props[i] == "parts")
+            {
+                if (int.TryParse(props[i - 1], out var partsCount))
+                {
+                    if (partsCount < 0)
+                        throw new Exception($"Parts count cannot be negative '{line}'"); // TODO: Highlight syntax error (line.replace(error))
+
+                    result.Parts = partsCount;
+                }
+                else
+                {
+                    throw new Exception($"Invalid string before 'parts' {line}");
+                }
+            }
+        }
+
+        return result;
     }
 
     private static void Write(string finalPath, bool append, int finalChaptersAmount, int finalStartFrom, WriterOptions options)
@@ -171,7 +244,7 @@ public static class ChapterFileWriter
         if (!options.FileName.EndsWith(".md")) options.FileName += ".md";
     }
 
-    private static string? GetMarkedString(int i, int markedFrom, bool useMarked)
+    private static string GetMarkedString(int i, int markedFrom, bool useMarked)
     {
         if (!useMarked) return " ";
 

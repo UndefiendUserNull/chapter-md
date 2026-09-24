@@ -6,6 +6,10 @@
     "CLI Default": {
       "commandName": "Project",
       "commandLineArgs": "--file-name \"English sem1.md\" --amount 12 --sub-amount 7 --sub-title \"Unit\" --start-from 0 --output \"Study\" --numbering-style Romanian --overwrite --unmark"
+    },
+    "Profile 1": {
+      "commandName": "Project",
+      "commandLineArgs": "--template template.txt"
     }
   }
 }

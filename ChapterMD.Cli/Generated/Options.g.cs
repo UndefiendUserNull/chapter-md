@@ -113,4 +113,9 @@ public partial class Options {
 	[DefaultValue(ChapterMD.Core.NumberingStyle.English)]
 	public ChapterMD.Core.NumberingStyle NumberingStyle {get; set;} = ChapterMD.Core.NumberingStyle.English;
 
+	[CommandOption("--template")]
+	[Description("The template file.")]
+	[DefaultValue("")]
+	public string templateFile {get; set;} = string.Empty;
+
 }

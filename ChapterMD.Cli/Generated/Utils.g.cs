@@ -29,6 +29,7 @@ public static partial class Utils
 			Unmark = options.Unmark,
 			SubChapterStyleType = options.SubChapterStyleType,
 			NumberingStyle = options.NumberingStyle,
+			templateFile = options.templateFile,
 
             };
         }

@@ -85,7 +85,7 @@ public static class Utils
             int digit = text[i] - '\u0660'; // '٠'
             if ((uint)digit > 9)
                 throw new FormatException($"Invalid Arabic-Indic digit: '{text[i]}'.");
-            result = result * 10 + digit;
+            result = (result * 10) + digit;
         }
 
         return checked((int)(sign * result));
@@ -125,5 +125,23 @@ public static class Utils
         'M' => 1000,
         _ => throw new FormatException($"Invalid Roman numeral character: '{c}'.")
     };
+
+    public static (int Min, int Max) ParseRange(string text)
+    {
+        var block = text.Replace(" ", string.Empty).Trim();
+
+        if (block.Length < 5 || block[0] != '[')
+            throw new FormatException($"Invalid range format '{text}'");
+
+        block = block[1..(block.IndexOf(']'))]; // Without brackets
+
+        int commaPos = block.IndexOf(',');
+        if (commaPos < 0) throw new FormatException($"Missing comma '{text}'");
+
+        var min = int.Parse(block[..commaPos].Trim());
+        var max = int.Parse(block[(commaPos + 1)..].Trim());
+
+        return (min, max);
+    }
 
 }

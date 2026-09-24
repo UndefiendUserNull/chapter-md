@@ -3,10 +3,9 @@
     "ChapterMD.Core": {
       "commandName": "Project"
     },
-    "Start CLI": {
+    "Profile 1": {
       "commandName": "Project",
-      "commandLineArgs": "-m work.md -c 15",
-      "workingDirectory": "${ProjectDir)"
+      "commandLineArgs": "--template template.txt --file-name template_test.md"
     }
   }
 }
