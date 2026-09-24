@@ -13,7 +13,6 @@ public static class ChapterFileWriter
 
         Console.SetOut(writer);
 
-
         HandleConflicts(options);
 
         var finalPath = Path.Combine(options.Output, options.FileName);

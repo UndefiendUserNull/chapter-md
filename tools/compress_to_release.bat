@@ -87,8 +87,9 @@ if "%VERSION%"=="" (
     exit /b 1
 )
 
-set "OUTDIR=../Archives"
-for %%I in ("%OUTDIR%") do set "OUTDIR=%%~fI"
+REM --- Archives folder is two levels above the target exe's folder ---
+set "OUTDIR=..\..\Archives"
+for %%I in ("%TARGET_DIR%%OUTDIR%") do set "OUTDIR=%%~fI"
 if not exist "%OUTDIR%" mkdir "%OUTDIR%"
 set "ARCHIVE=%OUTDIR%\CHMD.Cli-v%VERSION%-x64.7z"
 
