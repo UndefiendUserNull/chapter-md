@@ -1,3 +1,6 @@
+# ⚠️⚠️⚠️ **OUTDATED**
+
+
 # Options Generator Explained
 
 ## `options.txt` Format
