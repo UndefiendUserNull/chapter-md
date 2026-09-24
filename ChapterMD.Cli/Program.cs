@@ -37,8 +37,10 @@ public static class Program
 
         if (opts.FileName != string.Empty && opts.ChaptersAmount > 0)
         {
-            //Console.WriteVerboseLine($"Writing {opts.ChaptersAmount} chapters in {opts.FileName} and {opts.SubChaptersAmount} Sub-Chapters ...");
-            Core.ChapterFileWriter.WriteChapterFile(Utils.ToWriterOptions(opts), bridge);
+            if (opts.templateFile == string.Empty)
+                Core.ChapterFileWriter.WriteChapterFile(Utils.ToWriterOptions(opts), bridge);
+            else
+                Core.ChapterFileWriter.WriteChapterFileFromTemplate(Utils.ToWriterOptions(opts));
         }
 
         return 0;

@@ -13,10 +13,6 @@ public static class ChapterFileWriter
 
         Console.SetOut(writer);
 
-        if (options.templateFile != string.Empty)
-        {
-            ParseTemplate(options.templateFile);
-        }
 
         HandleConflicts(options);
 
@@ -60,7 +56,7 @@ public static class ChapterFileWriter
         }
     }
 
-    private static void ParseTemplate(string templateFile)
+    private static Dictionary<int, ChapterProperties> ParseTemplate(string templateFile)
     {
         string[] data = File.ReadAllLines(templateFile);
         Dictionary<int, ChapterProperties> theThing = [];
@@ -108,11 +104,51 @@ public static class ChapterFileWriter
 
         }
 
-        foreach (var item in theThing)
-        {
+        return theThing;
+    }
 
-            Console.WriteLine(item);
+    public static void WriteChapterFileFromTemplate(WriterOptions options)
+    {
+        var theThing = ParseTemplate(options.templateFile);
+
+        using var writer = new StreamWriter("t.md");
+
+        foreach (var chapter in theThing)
+        {
+            string styledChapterNumber = Utils.ConvertDecimalToNumberType(chapter.Key, options.NumberingStyle);
+
+            writer.WriteLine($"- [{GetMarkedString(chapter.Value.IsMarked)}] {options.Title} {styledChapterNumber}");
+
+            if (chapter.Value.Parts > 0)
+            {
+                for (int j = 0; j < chapter.Value.Parts; j++)
+                {
+                    string styledSubChapterNumber = Utils.ConvertDecimalToNumberType(j + chapter.Value.StartFrom, options.NumberingStyle);
+                    string subChapterEnding = string.Empty;
+
+                    switch (options.SubChapterStyleType)
+                    {
+                        case SubChapterStyleType.XAndY:
+                            subChapterEnding = $"{styledChapterNumber}.{styledSubChapterNumber}";
+                            break;
+                        case SubChapterStyleType.XOnly:
+                            subChapterEnding = $"{styledChapterNumber}";
+                            break;
+                        case SubChapterStyleType.YOnly:
+                            subChapterEnding = $"{styledSubChapterNumber}";
+                            break;
+                        case SubChapterStyleType.None:
+                            subChapterEnding = string.Empty;
+                            break;
+                    }
+                    writer.WriteLine($"\t- [{GetMarkedString(chapter.Value.IsMarked)}] {options.SubTitle} {subChapterEnding}");
+                }
+            }
         }
+
+        Console.WriteLine(ConsoleWritingUtils.Style($"Generated {options.FileName} at {"."}.", ConsoleWritingUtils.MessageType.INFO));
+
+
     }
 
     private static ChapterProperties ParseLine(string line)
@@ -282,4 +318,6 @@ public static class ChapterFileWriter
 
         return i >= markedFrom ? "X" : " ";
     }
+
+    private static string GetMarkedString(bool useMarked) => useMarked ? "X" : " ";
 }
