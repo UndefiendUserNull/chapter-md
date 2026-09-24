@@ -97,7 +97,6 @@ public static class ChapterFileWriter
     private static void Unmark(string finalPath)
     {
         string[] lines = [];
-        string[] splitLines = lines.Split("/");
 
         {
             using StreamReader sr = new(finalPath);
