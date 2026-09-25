@@ -1,8 +1,4 @@
-﻿using System.Text.RegularExpressions;
-
-namespace ChapterMD.Core;
-
-
+﻿namespace ChapterMD.Core;
 
 public static class ChapterFileWriter
 {
@@ -26,7 +22,7 @@ public static class ChapterFileWriter
             {
                 if (options.templateFile != string.Empty)
                 {
-                    WriteChapterFileFromTemplate(options, finalPath);
+                    TemplateHandler.WriteChapterFileFromTemplate(options, finalPath);
                     return;
                 }
 
@@ -37,7 +33,7 @@ public static class ChapterFileWriter
 
                 if (Path.Exists(finalPath) && append && !options.FreshAppend)
                 {
-                    UpdateWritingValuesForAppend(finalPath, ref finalStartFrom, ref finalChaptersAmount, options.StartFrom);
+                    Utils.UpdateWritingValuesForAppend(finalPath, ref finalStartFrom, ref finalChaptersAmount, options.StartFrom);
                 }
 
                 if (options.Unmark)
@@ -61,164 +57,7 @@ public static class ChapterFileWriter
         }
     }
 
-    private static Dictionary<int, ChapterProperties> ParseTemplate(string templateFile)
-    {
-        string[] data = File.ReadAllLines(templateFile);
-        Dictionary<int, ChapterProperties> theThing = [];
 
-        foreach (var block in data)
-        {
-            // Range rules
-            if (block.StartsWith('['))
-            {
-                var rangeFound = Utils.ParseRange(block);
-                for (int i = rangeFound.Min; i <= rangeFound.Max; i++)
-                {
-                    theThing[i] = ParseLine(block);
-                }
-            }
-
-            // Individual
-            if (int.TryParse(block.Split(' ')[0], out var chapterIndex))
-            {
-                if (chapterIndex < 0)
-                    throw new Exception($"Start from cannot be negative '{block}'");
-
-                theThing[chapterIndex] = ParseLine(block);
-            }
-
-            // Individual Groups
-            {
-                var indexOfColon = block.IndexOf(':') < 0 ? throw new Exception($"No colon was found '{block}'") : block.IndexOf(':');
-                var safeToParseBlock = block[..indexOfColon].Trim().Replace(" ", string.Empty);
-                if (Regex.IsMatch(safeToParseBlock, @"^\d,"))
-                {
-                    try
-                    {
-                        var group = safeToParseBlock.Split(',').Select(x => int.Parse(x));
-                        foreach (var i in group)
-                        {
-                            theThing[i] = ParseLine(block);
-                        }
-                    }
-                    catch (InvalidCastException)
-                    {
-                        throw new InvalidCastException($"Error while casting block '{safeToParseBlock}' containing NaN.");
-                    }
-                }
-            }
-
-        }
-
-        return theThing;
-    }
-
-    public static void WriteChapterFileFromTemplate(WriterOptions options, string fullPath)
-    {
-        var theThing = ParseTemplate(options.templateFile);
-
-        using var writer = new StreamWriter(fullPath);
-
-        foreach (var chapter in theThing)
-        {
-            string styledChapterNumber = Utils.ConvertDecimalToNumberType(chapter.Key, options.NumberingStyle);
-
-            writer.WriteLine($"- [{GetMarkedString(chapter.Value.IsMarked)}] {options.Title} {styledChapterNumber}");
-
-            if (chapter.Value.Parts > 0)
-            {
-                for (int j = 0; j < chapter.Value.Parts; j++)
-                {
-                    string styledSubChapterNumber = Utils.ConvertDecimalToNumberType(j + chapter.Value.StartFrom, options.NumberingStyle);
-                    string subChapterEnding = string.Empty;
-
-                    switch (options.SubChapterStyleType)
-                    {
-                        case SubChapterStyleType.XAndY:
-                            subChapterEnding = $"{styledChapterNumber}.{styledSubChapterNumber}";
-                            break;
-                        case SubChapterStyleType.XOnly:
-                            subChapterEnding = $"{styledChapterNumber}";
-                            break;
-                        case SubChapterStyleType.YOnly:
-                            subChapterEnding = $"{styledSubChapterNumber}";
-                            break;
-                        case SubChapterStyleType.None:
-                            subChapterEnding = string.Empty;
-                            break;
-                    }
-                    writer.WriteLine($"\t- [{GetMarkedString(chapter.Value.IsMarked)}] {options.SubTitle} {subChapterEnding}");
-                }
-            }
-        }
-
-        Console.WriteLine(ConsoleWritingUtils.Style($"Generated {options.FileName} at {"."}.", ConsoleWritingUtils.MessageType.INFO));
-
-
-    }
-
-    private static ChapterProperties ParseLine(string line)
-    {
-        bool partsFound = false, startFromFound = false, markedFound = false;
-
-        var indexOfColon = line.Replace(" ", string.Empty).IndexOf(':') < 0 ? throw new Exception($"No colon was found '{line}'") : line.Replace(" ", string.Empty).IndexOf(':');
-        string[] props = line[(indexOfColon + 1)..].Split(' ');
-
-        ChapterProperties result = new(1, 1, false);
-
-        for (int i = 0; i < props.Length; i++)
-        {
-            if (props[i] == "marked")
-            {
-                result.IsMarked = true;
-                markedFound = true;
-            }
-
-            else if (props[i] == "from")
-            {
-                if (int.TryParse(props[i + 1], out var parsedStartFrom))
-                {
-                    if (parsedStartFrom < 0)
-                        throw new Exception($"Start from cannot be negative '{line}'"); // TODO: Highlight syntax error (line.replace(error))
-
-                    result.StartFrom = parsedStartFrom;
-                    startFromFound = true;
-                }
-                else
-                {
-                    throw new Exception($"Invalid string after 'from' {line}");
-                }
-            }
-            else if (props[i] == "parts")
-            {
-                if (int.TryParse(props[i - 1], out var partsCount))
-                {
-                    if (partsCount < 0)
-                        throw new Exception($"Parts count cannot be negative '{line}'"); // TODO: Highlight syntax error (line.replace(error))
-
-                    result.Parts = partsCount;
-                    partsFound = true;
-                }
-                else
-                {
-                    throw new Exception($"Invalid string before 'parts' {line}");
-                }
-            }
-            else
-            {
-                if (!markedFound)
-                    result.IsMarked = false;
-                if (!partsFound)
-                    result.Parts = 1;
-                if (!startFromFound)
-                    result.StartFrom = 1;
-            }
-
-
-        }
-
-        return result;
-    }
 
     private static void Write(string finalPath, bool append, int finalChaptersAmount, int finalStartFrom, WriterOptions options)
     {
@@ -228,7 +67,7 @@ public static class ChapterFileWriter
         {
             string styledChapterNumber = Utils.ConvertDecimalToNumberType(i + finalStartFrom, options.NumberingStyle);
 
-            writer.WriteLine($"- [{GetMarkedString(i, options.MarkedFrom, options.Marked)}] {options.Title} {styledChapterNumber}");
+            writer.WriteLine($"- [{Utils.GetMarkedString(i, options.MarkedFrom, options.Marked)}] {options.Title} {styledChapterNumber}");
 
             if (options.SubChaptersAmount > 0)
             {
@@ -252,7 +91,7 @@ public static class ChapterFileWriter
                             subChapterEnding = string.Empty;
                             break;
                     }
-                    writer.WriteLine($"\t- [{GetMarkedString(i, options.SubMarkedFrom, options.SubMarked)}] {options.SubTitle} {subChapterEnding}");
+                    writer.WriteLine($"\t- [{Utils.GetMarkedString(i, options.SubMarkedFrom, options.SubMarked)}] {options.SubTitle} {subChapterEnding}");
                 }
             }
         }
@@ -290,35 +129,6 @@ public static class ChapterFileWriter
         return;
     }
 
-    public static void UpdateWritingValuesForAppend(string finalPath, ref int finalStartFrom, ref int finalChaptersAmount, int startFrom)
-    {
-        Console.WriteLine(ConsoleWritingUtils.Style($"File at {finalPath} already exists and option append is used.", ConsoleWritingUtils.MessageType.WARNING));
-        string[] data = File.ReadAllLines(finalPath);
-
-        if (data.Length == 0)
-        {
-            Console.WriteLine(ConsoleWritingUtils.Style("File found was empty.", ConsoleWritingUtils.MessageType.ERROR));
-            return;
-        }
-
-        var lastChapter = data.Last(x => !x.StartsWith('\t')).Split(' ');
-
-
-        try
-        {
-            int parsed = Utils.RevertNumberTypeToDecimal(lastChapter[lastChapter.Length - 1]);
-
-            finalStartFrom = parsed + 1;
-            Console.WriteLine(ConsoleWritingUtils.Style($"Last chapter found = {finalStartFrom}", ConsoleWritingUtils.MessageType.INFO));
-        }
-        catch
-        {
-            Console.WriteLine(ConsoleWritingUtils.Style($"Couldn't find the last chapter in {finalPath}, using fresh append instead.", ConsoleWritingUtils.MessageType.ERROR));
-            finalStartFrom = startFrom;
-        }
-        Console.WriteLine(ConsoleWritingUtils.Style($"Start from = {finalStartFrom}", ConsoleWritingUtils.MessageType.INFO));
-    }
-
     private static void HandleConflicts(WriterOptions options)
     {
         if (options.StartFrom > options.ChaptersAmount)
@@ -337,13 +147,4 @@ public static class ChapterFileWriter
 
         if (!options.FileName.EndsWith(".md")) options.FileName += ".md";
     }
-
-    private static string GetMarkedString(int i, int markedFrom, bool useMarked)
-    {
-        if (!useMarked) return " ";
-
-        return i >= markedFrom ? "X" : " ";
-    }
-
-    private static string GetMarkedString(bool useMarked) => useMarked ? "X" : " ";
 }

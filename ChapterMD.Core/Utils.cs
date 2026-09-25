@@ -1,6 +1,8 @@
-﻿namespace ChapterMD.Core;
+﻿using System.Text.RegularExpressions;
 
-public static class Utils
+namespace ChapterMD.Core;
+
+public static partial class Utils
 {
     public static int RevertNumberTypeToDecimal(string num)
     {
@@ -143,5 +145,42 @@ public static class Utils
 
         return (min, max);
     }
+    public static void UpdateWritingValuesForAppend(string finalPath, ref int finalStartFrom, ref int finalChaptersAmount, int startFrom)
+    {
+        Console.WriteLine(ConsoleWritingUtils.Style($"File at {finalPath} already exists and option append is used.", ConsoleWritingUtils.MessageType.WARNING));
+        string[] data = File.ReadAllLines(finalPath);
 
+        if (data.Length == 0)
+        {
+            Console.WriteLine(ConsoleWritingUtils.Style("File found was empty.", ConsoleWritingUtils.MessageType.ERROR));
+            return;
+        }
+
+        var lastChapter = data.Last(x => !x.StartsWith('\t')).Split(' ');
+
+
+        try
+        {
+            int parsed = Utils.RevertNumberTypeToDecimal(lastChapter[lastChapter.Length - 1]);
+
+            finalStartFrom = parsed + 1;
+            Console.WriteLine(ConsoleWritingUtils.Style($"Last chapter found = {finalStartFrom}", ConsoleWritingUtils.MessageType.INFO));
+        }
+        catch
+        {
+            Console.WriteLine(ConsoleWritingUtils.Style($"Couldn't find the last chapter in {finalPath}, using fresh append instead.", ConsoleWritingUtils.MessageType.ERROR));
+            finalStartFrom = startFrom;
+        }
+        Console.WriteLine(ConsoleWritingUtils.Style($"Start from = {finalStartFrom}", ConsoleWritingUtils.MessageType.INFO));
+    }
+    public static string GetMarkedString(int i, int markedFrom, bool useMarked)
+    {
+        if (!useMarked) return " ";
+
+        return i >= markedFrom ? "X" : " ";
+    }
+
+    public static string GetMarkedString(bool useMarked) => useMarked ? "X" : " ";
+    [GeneratedRegex(@"^\d,")]
+    public static partial Regex StartsWithDigit();
 }
