@@ -102,3 +102,8 @@ ChapterMD.Core.NumberingStyle NumberingStyle = ChapterMD.Core.NumberingStyle.Eng
 [Description("The template file.")]
 [DefaultValue("")]
 string templateFile = string.Empty
+
+[CommandOption("--names")]
+[Description("The names file that contains each chapter and sub-chapter name")]
+[DefaultValue("")]
+string namesFile = string.Empty

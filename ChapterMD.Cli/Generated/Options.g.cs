@@ -118,4 +118,9 @@ public partial class Options {
 	[DefaultValue("")]
 	public string templateFile {get; set;} = string.Empty;
 
+	[CommandOption("--names")]
+	[Description("The names file that contains each chapter and sub-chapter name")]
+	[DefaultValue("")]
+	public string namesFile {get; set;} = string.Empty;
+
 }
