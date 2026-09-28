@@ -30,6 +30,7 @@ public static partial class Utils
 			SubChapterStyleType = options.SubChapterStyleType,
 			NumberingStyle = options.NumberingStyle,
 			templateFile = options.templateFile,
+			namesFile = options.namesFile,
 
             };
         }

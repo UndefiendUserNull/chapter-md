@@ -52,4 +52,6 @@ public partial class WriterOptions {
 
 	public string templateFile {get; set;} = string.Empty;
 
+	public string namesFile {get; set;} = string.Empty;
+
 }
